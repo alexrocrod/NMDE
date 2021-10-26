@@ -5,19 +5,21 @@
 % November 2021
 
 
-%% Question 1
-% 2-step Simpson's method:
-% y(n+2) = y(n) + h/3 * (f(n) + 4*f(n+1) + f(n+2));
+%% Question 5
+% Lotka–Volterra
 
-% y' = -5y;
 %% Constants
-h = 0.02;
-T = 10;
-ts = 0:h:T;
+alpha = 0.2;
+beta = 0.01;
+gama = 0.07;
+delta = 0.004;
 
-N = length(ts);
-y = Zeros(N+1,1);
-y(1) = 1;
+x0 = 19;
+y0 = 22;
+t0 = 0;
+T = 300;
+
+h = 10^-3;
 
 
 

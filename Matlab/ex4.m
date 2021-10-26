@@ -5,20 +5,22 @@
 % November 2021
 
 
-%% Question 1
-% 2-step Simpson's method:
-% y(n+2) = y(n) + h/3 * (f(n) + 4*f(n+1) + f(n+2));
+%% Question 4
 
-% y' = -5y;
+% y' = -Ay;
 %% Constants
-h = 0.02;
-T = 10;
+nx = 100;
+G = numgrid ( 'S' , nx ) ;
+A = delsq(G) * ( nx-1)^2 ;
+
+h=?;
+T = 0.1;
 ts = 0:h:T;
 
 N = length(ts);
-y = Zeros(N+1,1);
+y = Ones(N+1,1);
 y(1) = 1;
 
-
+lambda = -eigs(A,1,'lm');
 
 %% 
