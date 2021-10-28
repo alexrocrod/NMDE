@@ -20,7 +20,7 @@ ts = 0:h:T;
 N = length(ts);
 y = zeros(N,1);
 y(1) = 1;
-f = @(y) -5*y; % function for ys not in the vector 
+f = @(y) -5*y; 
 y_exact = -5/2*ts.^2 + 1;
 
 %% Compute y(2) - FE
