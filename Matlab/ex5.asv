@@ -1,0 +1,33 @@
+%% Exercise # 1 -  Numerical methods for ODEs
+% Course: Numerical Methods For Differential Equations
+% Name: Alexandre da Rocha Rodrigues
+% Matricola: 2039952
+% November 2021
+
+
+%% Question 5
+% Lotka–Volterra
+
+% x'(t) = x(t) (α − βy(t))
+% y'(t) = y(t) (δ − γx(t))
+% x(0) = x0
+% y(0) = y0
+
+%% Constants
+alpha = 0.2;
+beta = 0.01;
+gama = 0.07;
+delta = 0.004;
+
+x0 = 19;
+y0 = 22;
+t0 = 0;
+T = 300;
+
+h = 10^-3;
+
+fx = @(x,y) x * (alfa - beta*y);
+fx = @(x,y) x * (alfa - beta*y);
+
+
+%% 

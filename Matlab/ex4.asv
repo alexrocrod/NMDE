@@ -17,8 +17,9 @@ A = delsq(G) * ( nx-1)^2 ;
 lambda = -eigs(A,1,'lm');
 
 % h=(-lambda)^-2;
+
 T = 0.1;
-h=T/nx;
+h=(-lambda)^-2;
 ts = h:h:T;
 
 N = length(ts);
@@ -26,7 +27,6 @@ y = ones(N,N);
 % y(1) = ones(1,N);
 
 %y_exact_f = exp(0.1*A)*y(1);
-f = @(y) -transpose(A)*y;
 
 %% Main
 
