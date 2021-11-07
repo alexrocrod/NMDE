@@ -12,22 +12,25 @@ clear all
 % y(n+2) = y(n) + h/3 * (f(n) + 4*f(n+1) + f(n+2));
 
 % y' = -10y^2;
+
+f = @(y) -10*y^2; 
+
 %% Constants
 ks= 5:10;
 T = 2;
 hs = 2.^-ks;
-errorf=zeros(length(hs),1);
-Nsteps=zeros(length(hs),1);
-ie=1;
+errorf = zeros(length(hs),1);
+Nsteps = zeros(length(hs),1);
+ie = 1;
+
 for h=hs
     ts = 0:h:T;
     
     N = length(ts);
     y = zeros(N,1);
     y(1) = 1;
-    
-    f = @(y) -10*y^2; 
-    y_exact = -10/3*ts.^3 + 1;
+
+    y_exact = -10/3*ts.^3 + y(1);
     
     % Main Method
     for i=2:N
@@ -40,12 +43,13 @@ for h=hs
     end
     
     Nsteps(ie) = N;
-    errorf(ie) = abs(y(end)-y_exact(T));
+    errorf(ie) = abs(y(end)-y_exact(end));
     ie=ie+1;
    
 end
-   
-plot(log(Nsteps),log(errorf))
-
+  
+loglog(Nsteps,errorf)
+format longEng
 tab = [transpose(hs) errorf]
+format default
 

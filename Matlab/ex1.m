@@ -24,15 +24,15 @@ f = @(y) -5*y;
 y_exact = -5/2*ts.^2 + 1;
 
 %% Compute y(2) - FE
-% y(2) = y(1) + h*f(y(1));
+y(2) = y(1) + h*f(y(1));
 
 %% Compute y(2) - RK4
-k1 = f(y(1));
-k2 = f(y(1)+h/2*k1);
-k3 = f(y(1)+h/2*k2);
-k4 = f(y(1)+h*k3);
-
-y(2) = y(1) + h/6 * (k1 + 2*k2 + 2*k3 + k4);
+% k1 = f(y(1));
+% k2 = f(y(1)+h/2*k1);
+% k3 = f(y(1)+h/2*k2);
+% k4 = f(y(1)+h*k3);
+% 
+% y(2) = y(1) + h/6 * (k1 + 2*k2 + 2*k3 + k4);
 
 %% Main Method
 for i=1:N-2
@@ -40,4 +40,7 @@ for i=1:N-2
 end
 
 plot(ts,abs(y-y_exact),'.')
+
+error = abs(y-y_exact);
+errorf = error(end)
 
