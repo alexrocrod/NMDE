@@ -62,7 +62,7 @@ plot(ts, abs(yf-y_exact))
 
 %% Solve with CN
 ords=3:5;
-hs1=10^-ords;
+hs1=10.^-ords;
 for h=hs1
     tol = h^-3;
 

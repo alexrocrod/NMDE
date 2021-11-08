@@ -16,14 +16,6 @@ clear all
 
 %% Constants
 
-% alpha = 1;
-% beta = 8/3;
-% gamma = 1;
-% delta = 1;
-% 
-% x0 = 1;
-% y0 = 1;
-
 alpha = 0.2;
 beta = 0.01;
 gamma = 0.004;
@@ -50,7 +42,6 @@ y(1) = y0;
 
 r = [x,y];
 
-
 %% Main 
 
 for i=2:N
@@ -68,4 +59,5 @@ y = r(:,2);
 plot(ts,x,'b.')
 hold on
 plot(ts,y,'r.')
+legend("prey","predator",'Location','best')
 

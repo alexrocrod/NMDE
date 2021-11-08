@@ -8,10 +8,8 @@
 \usepackage{caption}
 \usepackage{indentfirst}
 \usepackage{amssymb}
+\usepackage{float}
 
-
-\newcommand{\cod}{\texttt}
-\newcommand{\ita}{\textit}
 
 \graphicspath{ {./images/} }
 \geometry{left=2.5cm, right=2.5cm, top=2.5cm, bottom=3cm}
@@ -40,15 +38,50 @@
 		% answer to theoretical questions
 		\subsection*{Question 1}
 			%....
-			%a) done
-			%b) done
-			%c) done
+			\begin{figure}[H]
+				\centering
+				\includegraphics[width=\linewidth]{ex1_fe.jpg}
+				\caption{Absolute error in function of time using Forward Euler method to compute y(1)}
+				\label{fig:ex1_fe}
+			\end{figure}
+		
+			We got a maximum error of $1.0256e+09$...
+			
+			\begin{figure}[H]
+				\centering
+				\includegraphics[width=\linewidth]{ex1_rk4.jpg}
+				\caption{Absolute error in function of time using RK4 method to compute y(1)}
+				\label{fig:ex1_rk4}
+			\end{figure}
+		
+			We got a maximum error of $7.6148e+08$...
+			
 			%d)
-			\subsubsection*{ Comment the different behavior observed by the numerical method.}
+			\subsubsection*{Comment the different behavior observed by the numerical method.}
 				%...
 				
 		\subsection*{Question 2}
-			% Done
+			\begin{figure}[H]
+				\centering
+				\includegraphics[width=\linewidth]{ex2.jpg}
+				\caption{LogLog plot of the error as a function of the number of steps.}
+				\label{fig:ex2}
+			\end{figure}
+		
+			\begin{table}[H]
+				\centering
+				\begin{tabular}{c|c}
+					\textbf{$h$}& \textbf{error}   \\ \hline
+					3.125000e-2 & 25.7142859434702 \\ \hline
+					1.562500e-2 & 25.7142857321434 \\ \hline
+					7.812500e-3 & 25.7142857154459 \\ \hline
+					3.906250e-3 & 25.7142857143588 \\ \hline
+					1.953125e-3 & 25.7142857142903 \\ \hline
+					9.765625e-4 & 25.7142857142860 \\ \hline
+				\end{tabular}
+			\end{table}
+		
+		The error reduces with the increase in the number of steps due to the decrease of $h$ as expected in theory. $\ldots$		
 		
 		\subsection*{Question 3}
 			% Nothing done....
@@ -60,9 +93,12 @@
 			%c) Nothing done....
 			
 		\subsection*{Question 5}
-			%....
-			%a) done
-			%b) done
+			\begin{figure}[H]
+				\centering
+				\includegraphics[width=\linewidth]{ex5.jpg}
+				\caption{Evolution of the number of preys and predators.}
+				\label{fig:ex5}
+			\end{figure}
 			
 			
 			

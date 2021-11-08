@@ -23,11 +23,14 @@ N = length(ts);
 y = zeros(N,1);
 
 f = @(y) -5*y; % function for ys not in the vector 
-y_exact = -5/2*ts.^2 + 1;
+y_exact = -5/2*ts.^2; % without constant (alfa)
 
 ial=1;
 % alfas=0.0001:0.0001:1; % finds that it is around 0.0025
-alfas=0.002:0.000001:0.003; % finds a more precise value
+% alfas=0.002:0.000001:0.003; % finds a more precise value
+alfas=0.00200:0.00000001:0.00205; % finds a even more precise value
+
+y_al = zeros(1,length(alfas));
 for alfa=alfas
     y(1) = alfa;
     %% Compute y(2) - RK4
@@ -46,15 +49,16 @@ for alfa=alfas
     ial = ial+1;
 end
 
-y_f_ex=ones(1,ial-1)*y_exact(end);
+y_f_ex = ones(1,length(alfas)) * y_exact(end) + alfas;
 
 plot(alfas,abs(y_al-y_f_ex),'.')
 
-[M,I] = min(abs(y_al-y_f_ex));
+[M,I] = min(abs(y_al-y_f_ex))
 
 alfaf = alfas(I);
 
-fprintf("minimum error=%d , alfa= %d\n", M, alfaf)
+format long
+fprintf("minimum error = %d , alfa = %d\n", M, alfaf)
 
 figure(2)
 
