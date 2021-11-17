@@ -1,9 +1,9 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.23 (MiKTeX 21.8) (preloaded format=pdflatex 2021.8.9)  7 NOV 2021 18:05
+This is pdfTeX, Version 3.141592653-2.6-1.40.23 (MiKTeX 21.10) (preloaded format=pdflatex 2021.11.8)  11 NOV 2021 19:38
 entering extended mode
 **./relatorio.tex
 (relatorio.tex
 LaTeX2e <2021-06-01> patch level 1
-L3 programming layer <2021-07-12>
+L3 programming layer <2021-10-18>
 (C:\Users\xandr\AppData\Local\Programs\MiKTeX\tex/latex/base\article.cls
 Document Class: article 2021/02/12 v1.4n Standard LaTeX document class
 (C:\Users\xandr\AppData\Local\Programs\MiKTeX\tex/latex/base\size11.clo
@@ -177,7 +177,7 @@ Package: float 2001/11/08 v1.3d Float enhancements (AL)
 )
 (C:\Users\xandr\AppData\Local\Programs\MiKTeX\tex/latex/l3backend\l3backend-pdf
 tex.def
-File: l3backend-pdftex.def 2021-08-04 L3 backend support: PDF output (pdfTeX)
+File: l3backend-pdftex.def 2021-10-18 L3 backend support: PDF output (pdfTeX)
 \l__color_backend_stack_int=\count275
 \l__pdf_internal_box=\box55
 ) (relatorio.aux)
@@ -287,26 +287,26 @@ Package pdftex.def Info: ./images//ex1_rk4.jpg  used on input line 52.
 
 {C:/Users/xandr/AppData/Local/MiKTeX/pdftex/config/pdftex.map} <./images//ex1_f
 e.jpg>]
-<./images//ex2.jpg, id=12, 562.1pt x 421.575pt>
+<./images//ex2.jpg, id=14, 562.1pt x 421.575pt>
 File: ./images//ex2.jpg Graphic file (type jpg)
 <use ./images//ex2.jpg>
 Package pdftex.def Info: ./images//ex2.jpg  used on input line 66.
 (pdftex.def)             Requested size: 455.24411pt x 341.43527pt.
  [2 <./images//ex1_rk4.jpg>]
-<./images//ex5.jpg, id=16, 562.1pt x 421.575pt>
+<./images//ex5.jpg, id=18, 562.1pt x 421.575pt>
 File: ./images//ex5.jpg Graphic file (type jpg)
 <use ./images//ex5.jpg>
 Package pdftex.def Info: ./images//ex5.jpg  used on input line 98.
 (pdftex.def)             Requested size: 455.24411pt x 341.43527pt.
  [3 <./images//ex2.jpg>] [4 <./images//ex5.jpg>] (relatorio.aux) ) 
 Here is how much of TeX's memory you used:
- 4350 strings out of 479294
- 68187 string characters out of 2858681
- 365588 words of memory out of 3000000
- 22210 multiletter control sequences out of 15000+600000
+ 4353 strings out of 478907
+ 68452 string characters out of 2851892
+ 367341 words of memory out of 3000000
+ 22193 multiletter control sequences out of 15000+600000
  411142 words of font info for 56 fonts, out of 8000000 for 9000
- 822 hyphenation exceptions out of 8191
- 57i,9n,66p,249b,296s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 1141 hyphenation exceptions out of 8191
+ 57i,10n,66p,249b,296s stack positions out of 5000i,500n,10000p,200000b,80000s
 <C:/Users/xan
 dr/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmbx10.pfb><C:/
 Users/xandr/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmbx12
@@ -314,10 +314,13 @@ Users/xandr/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmbx12
 cm/cmmi10.pfb><C:/Users/xandr/AppData/Local/Programs/MiKTeX/fonts/type1/public/
 amsfonts/cm/cmr10.pfb><C:/Users/xandr/AppData/Local/Programs/MiKTeX/fonts/type1
 /public/amsfonts/cm/cmr12.pfb><C:/Users/xandr/AppData/Local/Programs/MiKTeX/fon
-ts/type1/public/amsfonts/cm/cmr17.pfb>
-Output written on relatorio.pdf (4 pages, 157701 bytes).
+ts/type1/public/amsfonts/cm/cmr17.pfb><C:/Users/xandr/AppData/Local/Programs/Mi
+KTeX/fonts/type1/public/amsfonts/cm/cmr8.pfb><C:/Users/xandr/AppData/Local/Prog
+rams/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Users/xandr/AppData/L
+ocal/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy8.pfb>
+Output written on relatorio.pdf (4 pages, 185133 bytes).
 PDF statistics:
- 49 PDF objects out of 1000 (max. 8388607)
+ 64 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
  21 words of extra memory for PDF output out of 10000 (max. 10000000)
 
