@@ -21,7 +21,7 @@ N = length(ts);
 y = zeros(N,1);
 y(1) = 1;
 f = @(y) -5*y; 
-y_exact = -5/2*ts.^2 + 1;
+y_exact = exp(-5.*ts);
 
 %% Compute y(2) - FE
 y(2) = y(1) + h*f(y(1));
@@ -39,7 +39,7 @@ for i=2:N-2
     y(i+2) = y(i) + h/3 * (f(y(i)) + 4*f(y(i+1)) + f(y(i+2)));
 end
 
-% RK4 for comparison
+% RK4 for extra comparison
 % for i=3:N
 %         k1 = f(y(i-1));
 %         k2 = f(y(i-1)+h/2*k1);

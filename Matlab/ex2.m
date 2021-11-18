@@ -30,7 +30,7 @@ for h=hs
     y = zeros(N,1);
     y(1) = 1;
 
-    y_exact = -10/3*ts.^3 + y(1);
+    y_exact = 1./(10.*ts + 1);
     
     % Main Method
     for i=2:N
@@ -48,7 +48,7 @@ for h=hs
    
 end
   
-loglog(Nsteps,errorf)
+loglog(Nsteps,errorf,'-*')
 format longEng
 tab = [transpose(hs) errorf]
 format default

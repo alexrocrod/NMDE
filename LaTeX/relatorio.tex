@@ -37,7 +37,11 @@
 	\section*{Answers}
 	% answer to theoretical questions
 	\subsection*{Question 1}
-	%....
+	
+	\begin{equation}
+		y(t) = e^{-5t}
+	\end{equation}
+	
 	\begin{figure}[H]
 		\centering
 		\includegraphics[width=\linewidth]{ex1_fe.jpg}
@@ -58,9 +62,19 @@
 	
 	%d)
 	\subsubsection*{Comment the different behavior observed by the numerical method.}
-		
+		The Simpson's method has an empty stability region as proved by: $\ldots$
+		We can notice the difference in the initial conditions in our results.
+		The FE calculation for y(2) is better then the RK4 calculation given the best final error.
+		This is, although, not that relevant, the difference is of about $ 0.5 \times 10^{-10} \% $.
+%		We can conclude that, due to the clear instability of the Simpson's method, the initial conditions 
 	
 	\subsection*{Question 2}
+	
+	The exact solution can be found as:
+	\begin{equation}
+		y(t) = \frac{1}{10t + 1}
+	\end{equation}
+	
 	\begin{figure}[H]
 		\centering
 		\includegraphics[width=\linewidth]{ex2.jpg}
@@ -72,12 +86,12 @@
 		\centering
 		\begin{tabular}{c|c}
 			\textbf{$h$}& \textbf{error}   \\ \hline
-			$ 3.125000\times 10^{-2} $ & 25.7142859434702 \\ \hline
-			$ 1.562500\times 10^{-2} $ & 25.7142857321434 \\ \hline
-			$ 7.812500\times 10^{-3} $ & 25.7142857154459 \\ \hline
-			$ 3.906250\times 10^{-3} $ & 25.7142857143588 \\ \hline
-			$ 1.953125\times 10^{-3} $ & 25.7142857142903 \\ \hline
-			$ 9.765625\times 10^{-4} $ & 25.7142857142860 \\ \hline
+			$ 3.125000\times 10^{-2} $ & $ 2.291844\times 10^{-7} $ \\ \hline
+			$ 1.562500\times 10^{-2} $ & $ 1.785763\times 10^{-8} $ \\ \hline
+			$ 7.812500\times 10^{-3} $ & $ 1.160234\times 10^{-9} $ \\ \hline
+			$ 3.906250\times 10^{-3} $ & $ 7.312862\times 10^{-11} $ \\ \hline
+			$ 1.953125\times 10^{-3} $ & $ 4.579586\times 10^{-12} $ \\ \hline
+			$ 9.765625\times 10^{-4} $ & $ 2.863750\times 10^{-13} $ \\ \hline
 		\end{tabular}
 	\end{table}
 	
