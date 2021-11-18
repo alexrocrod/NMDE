@@ -50,10 +50,10 @@ end
 % end
 
 y=y';
-plot(ts,abs(y-y_exact),'.')
+error = abs(y-y_exact);
+plot(ts,error,'.')
 xlabel("time")
 ylabel("absolute error")
 
-error = abs(y-y_exact);
 errorf = error(end)
 

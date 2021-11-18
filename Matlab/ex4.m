@@ -17,7 +17,7 @@ y_exact = exact_solution(:,2);
 
 % y' = -Ay;
 %% Constants
-nx = 10; %100;
+nx = 30; %100;
 G = numgrid ( 'S' , nx ) ;
 A = delsq(G) * ( nx-1)^2 ;
 lambda = -eigs(A,1,'lm');
@@ -53,49 +53,49 @@ f = @(x) -A*x';
 % toc
 
 %% Solve with CN
-tic
+% tic
 yi = y(1,:)';
 ords=3:5;
 hs1=10.^-ords;
-% h=1e-1;
-res = zeros(N,3);
-iola=1;
-for h=hs1
-%     tol = h^3;
-    A2 = (eye(N)-A*h/2);
-    b = (eye(N)+A*h/2);
-    for i=2:N
-        b2 = b*yi;
-        yi = A2\b2;
-    end
-    res(:,iola) = yi;
-    iola = iola + 1;
-end
-toc
+% % h=1e-1;
+% res = zeros(N,3);
+% iola=1;
+% for h=hs1
+% %     tol = h^3;
+%     A2 = (eye(N)-A*h/2);
+%     b = (eye(N)+A*h/2);
+%     for i=2:N
+%         b2 = b*yi;
+%         yi = A2\b2;
+%     end
+%     res(:,iola) = yi;
+%     iola = iola + 1;
+% end
+% toc
 % yf = yi;
 
 
 %% Solve with BDF3
 % y(i+3) - 18/11*y(i+2) + 9/11*y(i+1) - 2/11*y(i) = 6/11 * h* f(y(i+3))
 
-
-% tic 
-% h=hs1(1);
-% % for h=hs1
+tic 
+res = zeros(N,3);
+iola=1;
+for h=hs1
 %     tol = h^3;
-%     A2 = (eye(N)-A*h/2);
-%     b = (eye(N)+A*h/2);
-%     for i=2:N
-% %         y(i,:) = y(i-1,:) + h/2 * (f(y(i-1,:))'+f(y(i,:))');
-% %         b2 = b*y(i-1,:)';
-% %         y(i,:) = A2\b2;
-%         b2 = b*yi;
-%         yi = A2\b2;
-%     end
-% % end
-% toc
-
-
+    y = zeros(N,N);
+    A2 = eye(N)-6*h/11*A;
+    y(1,:) = ones(1,N);
+    y(2,:) = 2*ones(1,N);
+    y(3,:) = 3*ones(1,N);
+    for i=1:N
+        b2 = 18/11*y(i+2,:)' - 9/11*y(i+1,:)' + 2/11*y(i,:)';
+        y(i+3,:) = A2\b2;
+    end
+    res(:,iola) = y(end);
+    iola = iola + 1;
+end
+toc
 
 %% Plots
 % yf = y(end,:)';
@@ -111,4 +111,8 @@ plot(ts, abs(yf-y_exact))
 figure(3)
 yf = res(:,3);
 plot(ts, abs(yf-y_exact))
+
+max(res(:,1)) == min(res(:,1))
+max(res(:,2)) == min(res(:,2))
+max(res(:,3)) == min(res(:,3))
 
