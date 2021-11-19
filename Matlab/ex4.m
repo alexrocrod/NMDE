@@ -79,20 +79,37 @@ hs1=10.^-ords;
 % y(i+3) - 18/11*y(i+2) + 9/11*y(i+1) - 2/11*y(i) = 6/11 * h* f(y(i+3))
 
 tic 
+y = zeros(N,N);
+y(1,:) = ones(1,N);
+
+for i=2:3
+    k1 = f(y(i-1,:));
+    k2 = f(y(i-1,:)+k1'.*h/2);
+    k3 = f(y(i-1,:)+h/2.*k2');
+    k4 = f(y(i-1,:)+h.*k3');
+        
+    y(i,:) = y(i-1,:) + h/6 * (k1 + 2*k2 + 2*k3 + k4)';
+end
+
+y_init = y;
+
+
 res = zeros(N,3);
 iola=1;
 for h=hs1
-%     tol = h^3;
-    y = zeros(N,N);
+    % Matlab \ 
     A2 = eye(N)-6*h/11*A;
-    y(1,:) = ones(1,N);
-    y(2,:) = 2*ones(1,N);
-    y(3,:) = 3*ones(1,N);
+    y = y_init;
     for i=1:N
         b2 = 18/11*y(i+2,:)' - 9/11*y(i+1,:)' + 2/11*y(i,:)';
         y(i+3,:) = A2\b2;
     end
-    res(:,iola) = y(end);
+    % Conjugate Gradient:
+    tol = h^3;
+
+
+
+    res(:,iola) = y(end,:);
     iola = iola + 1;
 end
 toc
@@ -112,7 +129,4 @@ figure(3)
 yf = res(:,3);
 plot(ts, abs(yf-y_exact))
 
-max(res(:,1)) == min(res(:,1))
-max(res(:,2)) == min(res(:,2))
-max(res(:,3)) == min(res(:,3))
 
