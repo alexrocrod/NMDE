@@ -33,7 +33,7 @@ N = length(ts);
 y = zeros(N,N);
 y(1,:) = ones(1,N);
 
-if nx ~= 100
+if N ~= 100
     y_exact = expm(-0.1*A)*ones(N,1);
 end
 f = @(x) -A*x';
@@ -51,14 +51,14 @@ f = @(x) -A*x';
 % toc
 
 %% Solve with ODE45
-% disp('Starting ODE45')
-% tic
-% tspan = [0 0.1];
-% [t,y] = ode45(@(t,y) -A*y, tspan, y(1,:));
-% toc
-% yf = y(end,:)';
-% plot(ts, abs(yf-y_exact))
-% return
+disp('Starting ODE45')
+tic
+tspan = [0 0.1];
+[t,y] = ode45(@(t,y) -A*y, tspan, y(1,:));
+toc
+yf = y(end,:)';
+plot(ts, abs(yf-y_exact))
+return
 
 %% Solve with CN
 disp('Starting CN')
@@ -70,12 +70,10 @@ tic
 res = zeros(N,3);
 iola=1;
 for h=hs1
-    fprintf('h=%d\n',h)
     % Matlab \ 
     A2 = (eye(N)+A*h/2);
     b = (eye(N)-A*h/2);
     for i=2:N
-        fprintf('i=%d\n',i)
         b2 = b*yi;
         yi = A2\b2;
     end
@@ -91,9 +89,9 @@ toc
 
 
 %% Solve with BDF3
+disp('Starting ODE45')
 % y(i+3) - 18/11*y(i+2) + 9/11*y(i+1) - 2/11*y(i) = 6/11 * h* f(y(i+3))
 
-disp('Starting BDF3')
 % tic 
 % y = zeros(N,N);
 % y(1,:) = ones(1,N);
@@ -111,9 +109,8 @@ disp('Starting BDF3')
 % 
 % 
 % res = zeros(N,3);
-% iola=1;   
+% iola=1;
 % for h=hs1
-%     fprintf('h=%d\n',h)
 %     % Matlab \ 
 %     A2 = eye(N)+6*h/11*A;
 %     y = y_init;
