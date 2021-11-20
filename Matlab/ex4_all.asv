@@ -16,14 +16,14 @@ y_exact = load("accurate_solution.txt");
 
 use_conjgrad=true;
 
-method = 3; % 0 - RK4 stability,  1 - ODE45, 2 - Crank-Nicolson, 3 - BDF3
+method = 1; % 0 - RK4 stability,  1 - ODE45, 2 - Crank-Nicolson, 3 - BDF3
 
 
 %% Question 4
 
 % y' = -Ay;
 %% Constants
-nx = 30; %100;
+nx = 20; %100;
 
 G = numgrid ( 'S' , nx ) ;
 A = delsq(G) * ( nx-1)^2 ;
@@ -69,11 +69,10 @@ if method == 1
     tic
     tspan = [0 0.1];
     [t,y] = ode45(@(t,y) -A*y, tspan, y(1,:));
-    yf = y(end,:)';
-    error = yf - y_exact;
-    fprintf('ODE45, Nsteps = %d, error = %d \n', length(t), norm(error, inf))
+    fprintf('ODE45 , h=%d, Nsteps = %d \n', h, N2)
     toc
-    plot(ts, abs(error))
+    yf = y(end,:)';
+    plot(ts, abs(yf-y_exact))
     return %end sricpt 
 end
 
@@ -81,7 +80,9 @@ end
 %% Solve with CN
 if method == 2
     disp('Starting CN')
-
+%     tic
+    res = zeros(N,3);
+    ires = 1;
     for h = hs1
         T = 0.1;
         ts = h:h:T;
@@ -95,25 +96,25 @@ if method == 2
         b = eye(N) - A * h/2;
         if ~use_conjgrad
              % Matlab \ :
-            fprintf('Matlab \\ , h=%d, Nsteps = %d \n', h, N2)
+            fprintf('Matlab \ , h=%d, Nsteps = %d \n', h, N2)
             for i=2:N2
+%                 fprintf('i=%d\n',i)
                 b2 = b * yi;
                 yi = A2\b2;
             end
-            error = yi-y_exact;
-            fprintf('Matlab \\, Nsteps = %d, error = %d \n', N2, norm(error, inf))
         else
             % Conjugate Gradient:
             fprintf('ConjGrad , h=%d, Nsteps = %d \n', h, N2)
             tol = h^3;
             for i=2:N2
+%                 fprintf('i=%d\n',i)
                 b2 = b * yi;
                 yi = conjgrad(A2, b2, yi, tol);
             end
-            error = yi-y_exact;
-            fprintf('ConjGrad, Nsteps = %d, error = %d \n', N2, norm(error, inf))
         end
-        toc   
+        toc
+        res(:,ires) = yi;
+        ires = ires + 1;    
     end
 end
 
@@ -123,7 +124,9 @@ end
 
 if method == 3
     disp('Starting BDF3')
-     
+    
+    res = zeros(N,3);
+    ires = 1;   
     for h=hs1
 
         T = 0.1;
@@ -144,26 +147,45 @@ if method == 3
         tic
         A2 = eye(N) + 6/11 * h * A;
         if ~use_conjgrad
-            fprintf('Matlab \\, h=%d, Nsteps = %d \n',h,N2)
+            fprintf('Matlab \ , h=%d, Nsteps = %d \n',h,N2)
             for i = 1:N2-3
+%                 fprintf('i=%d\n',i)
                 b2 = 18/11 * y(i+2,:)' - 9/11 * y(i+1,:)' + 2/11 * y(i,:)';
                 y(i+3,:) = A2\b2;
             end
-            error = y(end,:)'-y_exact;
-            fprintf('Matlab \\, Nsteps = %d, error = %d \n', N2, norm(error, inf))
         else
             fprintf('ConjGrad , h=%d, Nsteps = %d \n',h,N2)
             tol = h^3;
             for i = 1:N2-3
+%                 fprintf('i=%d\n',i)
                 b2 = 18/11 * y(i+2,:)' - 9/11 * y(i+1,:)' + 2/11 * y(i,:)';
                 y(i+3,:) = conjgrad(A2, b2, y(i+3,:)', tol);
             end
-            error = y(end,:)'-y_exact;
-            fprintf('ConjGrad, Nsteps = %d, error = %d \n', N2, norm(error, inf))
         end
         toc
+        res(:,ires) = y(end,:);
+        ires = ires + 1;
     end
 end
+
+%% Plots
+% Return to original 
+indexes = 1:N;
+
+figure(1)
+yf = res(:,1);
+plot(indexes, abs(yf - y_exact))
+xlim([1 N])
+
+figure(2)
+yf = res(:,2);
+plot(indexes, abs(yf - y_exact))
+xlim([1 N])
+
+figure(3)
+yf = res(:,3);
+plot(indexes, abs(yf - y_exact))
+xlim([1 N])
 
 
 %% Conjugate Gradient Method

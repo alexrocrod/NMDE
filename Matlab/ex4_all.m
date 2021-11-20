@@ -16,14 +16,14 @@ y_exact = load("accurate_solution.txt");
 
 use_conjgrad=true;
 
-method = 2; % 0 - RK4 stability,  1 - ODE45, 2 - Crank-Nicolson, 3 - BDF3
+method = 3; % 0 - RK4 stability,  1 - ODE45, 2 - Crank-Nicolson, 3 - BDF3
 
 
 %% Question 4
 
 % y' = -Ay;
 %% Constants
-nx = 30; %100;
+nx = 10; %100;
 
 G = numgrid ( 'S' , nx ) ;
 A = delsq(G) * ( nx-1)^2 ;
@@ -44,6 +44,9 @@ if nx ~= 100
     toc
 end
 f = @(x) -A*x';
+
+ords = 3:5;
+hs1 = 10.^-ords;
 
 %% Stability with RK4
 if method == 0
@@ -66,65 +69,54 @@ if method == 1
     tic
     tspan = [0 0.1];
     [t,y] = ode45(@(t,y) -A*y, tspan, y(1,:));
-    toc
     yf = y(end,:)';
-    plot(ts, abs(yf-y_exact))
+    error = yf - y_exact;
+    fprintf('ODE45, Nsteps = %d, error = %d \n', length(t), norm(error, inf))
+    toc
+    plot(ts, abs(error))
     return %end sricpt 
 end
 
-%% Initial
-y = zeros(N,N);
-y(1,:) = ones(1,N);
-
-for i=2:3
-    k1 = f(y(i-1,:));
-    k2 = f(y(i-1,:)+k1'.*h/2);
-    k3 = f(y(i-1,:)+h/2.*k2');
-    k4 = f(y(i-1,:)+h.*k3');
-        
-    y(i,:) = y(i-1,:) + h/6 * (k1 + 2*k2 + 2*k3 + k4)';
-end
-
-y_init = y;
-
-yi = y(1,:)';
-ords = 3:5;
-hs1 = 10.^-ords;
 
 %% Solve with CN
 if method == 2
     disp('Starting CN')
 %     tic
     res = zeros(N,3);
-    iola=1;
-    for h=hs1
-        fprintf('h=%d\n',h)
+    ires = 1;
+    for h = hs1
+        T = 0.1;
+        ts = h:h:T;
+        N2 = length(ts);
+        y = zeros(N2,N);
+        y(1,:) = ones(1,N);
+        yi = y(1,:)';
+
         tic
-        A2 = (eye(N)+A*h/2);
-        b = (eye(N)-A*h/2);
+        A2 = eye(N) + A * h/2;
+        b = eye(N) - A * h/2;
         if ~use_conjgrad
              % Matlab \ :
-            disp('Using \')
-            for i=2:N
+            fprintf('Matlab \ , h=%d, Nsteps = %d \n', h, N2)
+            for i=2:N2
 %                 fprintf('i=%d\n',i)
-                b2 = b*yi;
+                b2 = b * yi;
                 yi = A2\b2;
             end
         else
             % Conjugate Gradient:
-            disp('Using ConjGrad')
+            fprintf('ConjGrad , h=%d, Nsteps = %d \n', h, N2)
             tol = h^3;
-            for i=2:N
+            for i=2:N2
 %                 fprintf('i=%d\n',i)
-                b2 = b*yi;
-                yi = conjgrad(A2,b2,yi,tol);
+                b2 = b * yi;
+                yi = conjgrad(A2, b2, yi, tol);
             end
         end
         toc
-        res(:,iola) = yi;
-        iola = iola + 1;    
+        res(:,ires) = yi;
+        ires = ires + 1;    
     end
-%     toc
 end
 
 
@@ -133,48 +125,68 @@ end
 
 if method == 3
     disp('Starting BDF3')
-    tic 
     
     res = zeros(N,3);
-    iola=1;   
+    ires = 1;   
     for h=hs1
-        fprintf('h=%d\n, Nsteps ??',h)
-        A2 = eye(N)+6*h/11*A;
-        y = y_init;
+
+        T = 0.1;
+        ts = h:h:T;
+        N2 = length(ts);
+        y = zeros(N2,N);
+        y(1,:) = ones(1,N);
+
+        for i=2:3
+            k1 = f(y(i-1,:));
+            k2 = f(y(i-1,:) + h/2 .* k1');
+            k3 = f(y(i-1,:) + h/2 .* k2');
+            k4 = f(y(i-1,:) + h .* k3');
+                
+            y(i,:) = y(i-1,:) + h/6 * (k1 + 2*k2 + 2*k3 + k4)';
+        end
+
+        tic
+        A2 = eye(N) + 6/11 * h * A;
         if ~use_conjgrad
-            disp('Using \')
-            % Matlab \
-            for i=1:N-3
-                fprintf('i=%d\n',i)
-                b2 = 18/11*y(i+2,:)' - 9/11*y(i+1,:)' + 2/11*y(i,:)';
+            fprintf('Matlab \ , h=%d, Nsteps = %d \n',h,N2)
+            for i = 1:N2-3
+%                 fprintf('i=%d\n',i)
+                b2 = 18/11 * y(i+2,:)' - 9/11 * y(i+1,:)' + 2/11 * y(i,:)';
                 y(i+3,:) = A2\b2;
             end
         else
-            % Conjugate Gradient:
-            disp('Using ConjGrad')
+            fprintf('ConjGrad , h=%d, Nsteps = %d \n',h,N2)
             tol = h^3;
-            for i=1:N-3
-                fprintf('i=%d\n',i)
-                b2 = 18/11*y(i+2,:)' - 9/11*y(i+1,:)' + 2/11*y(i,:)';
-                y(i+3,:) = conjgrad(A2,b2,y(i+3,:)',tol);
+            for i = 1:N2-3
+%                 fprintf('i=%d\n',i)
+                b2 = 18/11 * y(i+2,:)' - 9/11 * y(i+1,:)' + 2/11 * y(i,:)';
+                y(i+3,:) = conjgrad(A2, b2, y(i+3,:)', tol);
             end
         end
-        res(:,iola) = y(end,:);
-        iola = iola + 1;
+        toc
+        res(:,ires) = y(end,:);
+        ires = ires + 1;
     end
-    toc
 end
 
 %% Plots
+% Return to original 
+indexes = 1:N;
+
 figure(1)
 yf = res(:,1);
-plot(ts, abs(yf-y_exact))
+plot(indexes, abs(yf - y_exact))
+xlim([1 N])
+
 figure(2)
 yf = res(:,2);
-plot(ts, abs(yf-y_exact))
+plot(indexes, abs(yf - y_exact))
+xlim([1 N])
+
 figure(3)
 yf = res(:,3);
-plot(ts, abs(yf-y_exact))
+plot(indexes, abs(yf - y_exact))
+xlim([1 N])
 
 
 %% Conjugate Gradient Method
