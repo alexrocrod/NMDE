@@ -7,23 +7,14 @@
 close all
 clear all
 
-
-% load("exact_solution.txt")
-% t_exact = exact_solution(:,1);
-% y_exact = exact_solution(:,2);
-
+%% Question 4
 y_exact = load("accurate_solution.txt");
 
-use_conjgrad=true;
-
-method = 1; % 0 - RK4 stability,  1 - ODE45, 2 - Crank-Nicolson, 3 - BDF3
-
-
-%% Question 4
+method = 2; % 0 - RK4 stability,  1 - ODE45, 2 - Crank-Nicolson, 3 - BDF3
 
 % y' = -Ay;
 %% Constants
-nx = 20; %100;
+nx = 100;
 
 G = numgrid ( 'S' , nx ) ;
 A = delsq(G) * ( nx-1)^2 ;
@@ -37,12 +28,6 @@ N = length(ts);
 y = zeros(N,N);
 y(1,:) = ones(1,N);
 
-if nx ~= 100
-    disp('Starting exact solution computation')
-    tic
-    y_exact = expm(-0.1*A)*ones(N,1);
-    toc
-end
 f = @(x) -A*x';
 
 ords = 3:5;
@@ -69,10 +54,11 @@ if method == 1
     tic
     tspan = [0 0.1];
     [t,y] = ode45(@(t,y) -A*y, tspan, y(1,:));
-    fprintf('ODE45 , h=%d, Nsteps = %d \n', h, N2)
-    toc
     yf = y(end,:)';
-    plot(ts, abs(yf-y_exact))
+    error = yf - y_exact;
+    fprintf('ODE45, Nsteps = %d, error = %d \n', length(t), norm(error, inf))
+    toc
+    plot(ts, abs(error))
     return %end sricpt 
 end
 
@@ -80,9 +66,7 @@ end
 %% Solve with CN
 if method == 2
     disp('Starting CN')
-%     tic
-    res = zeros(N,3);
-    ires = 1;
+
     for h = hs1
         T = 0.1;
         ts = h:h:T;
@@ -94,27 +78,17 @@ if method == 2
         tic
         A2 = eye(N) + A * h/2;
         b = eye(N) - A * h/2;
-        if ~use_conjgrad
-             % Matlab \ :
-            fprintf('Matlab \ , h=%d, Nsteps = %d \n', h, N2)
-            for i=2:N2
-%                 fprintf('i=%d\n',i)
-                b2 = b * yi;
-                yi = A2\b2;
-            end
-        else
-            % Conjugate Gradient:
-            fprintf('ConjGrad , h=%d, Nsteps = %d \n', h, N2)
-            tol = h^3;
-            for i=2:N2
-%                 fprintf('i=%d\n',i)
-                b2 = b * yi;
-                yi = conjgrad(A2, b2, yi, tol);
-            end
+
+        fprintf('ConjGrad , h=%d, Nsteps = %d \n', h, N2)
+        tol = h^3;
+        for i=2:N2
+            b2 = b * yi;
+            yi = conjgrad(A2, b2, yi, tol);
         end
-        toc
-        res(:,ires) = yi;
-        ires = ires + 1;    
+        error = yi-y_exact;
+        fprintf('ConjGrad, Nsteps = %d, error = %d \n', N2, norm(error, inf))
+        
+        toc   
     end
 end
 
@@ -124,9 +98,7 @@ end
 
 if method == 3
     disp('Starting BDF3')
-    
-    res = zeros(N,3);
-    ires = 1;   
+     
     for h=hs1
 
         T = 0.1;
@@ -146,46 +118,19 @@ if method == 3
 
         tic
         A2 = eye(N) + 6/11 * h * A;
-        if ~use_conjgrad
-            fprintf('Matlab \ , h=%d, Nsteps = %d \n',h,N2)
-            for i = 1:N2-3
-%                 fprintf('i=%d\n',i)
-                b2 = 18/11 * y(i+2,:)' - 9/11 * y(i+1,:)' + 2/11 * y(i,:)';
-                y(i+3,:) = A2\b2;
-            end
-        else
-            fprintf('ConjGrad , h=%d, Nsteps = %d \n',h,N2)
-            tol = h^3;
-            for i = 1:N2-3
-%                 fprintf('i=%d\n',i)
-                b2 = 18/11 * y(i+2,:)' - 9/11 * y(i+1,:)' + 2/11 * y(i,:)';
-                y(i+3,:) = conjgrad(A2, b2, y(i+3,:)', tol);
-            end
+        
+        fprintf('ConjGrad , h=%d, Nsteps = %d \n',h,N2)
+        tol = h^3;
+        for i = 1:N2-3
+            b2 = 18/11 * y(i+2,:)' - 9/11 * y(i+1,:)' + 2/11 * y(i,:)';
+            y(i+3,:) = conjgrad(A2, b2, y(i+3,:)', tol);
         end
+        error = y(end,:)'-y_exact;
+        fprintf('ConjGrad, Nsteps = %d, error = %d \n', N2, norm(error, inf))
+        
         toc
-        res(:,ires) = y(end,:);
-        ires = ires + 1;
     end
 end
-
-%% Plots
-% Return to original 
-indexes = 1:N;
-
-figure(1)
-yf = res(:,1);
-plot(indexes, abs(yf - y_exact))
-xlim([1 N])
-
-figure(2)
-yf = res(:,2);
-plot(indexes, abs(yf - y_exact))
-xlim([1 N])
-
-figure(3)
-yf = res(:,3);
-plot(indexes, abs(yf - y_exact))
-xlim([1 N])
 
 
 %% Conjugate Gradient Method
@@ -195,10 +140,10 @@ function x = conjgrad(A, b, x, tol)
     rsold = r' * r;
 
     for i = 1:length(b)
-        Ap = A * p;
-        alpha = rsold / (p' * Ap);
+        z = A * p;
+        alpha = rsold / (z' * p);
         x = x + alpha * p;
-        r = r - alpha * Ap;
+        r = r - alpha * z;
         rsnew = r' * r;
         if sqrt(rsnew) < tol
               break
@@ -207,5 +152,3 @@ function x = conjgrad(A, b, x, tol)
         rsold = rsnew;
     end
 end
-
-

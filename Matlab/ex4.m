@@ -7,6 +7,7 @@
 close all
 clear all
 
+%% Question 4
 
 % load("exact_solution.txt")
 % t_exact = exact_solution(:,1);
@@ -16,14 +17,11 @@ y_exact = load("accurate_solution.txt");
 
 use_conjgrad=true;
 
-method = 3; % 0 - RK4 stability,  1 - ODE45, 2 - Crank-Nicolson, 3 - BDF3
-
-
-%% Question 4
+method = 1; % 0 - RK4 stability,  1 - ODE45, 2 - Crank-Nicolson, 3 - BDF3
 
 % y' = -Ay;
 %% Constants
-nx = 30; %100;
+nx = 100; %100;
 
 G = numgrid ( 'S' , nx ) ;
 A = delsq(G) * ( nx-1)^2 ;
@@ -83,6 +81,8 @@ if method == 2
     disp('Starting CN')
 
     for h = hs1
+        ola1 = now;
+        datetime(ola1,'ConvertFrom','datenum')
         T = 0.1;
         ts = h:h:T;
         N2 = length(ts);
@@ -185,5 +185,3 @@ function x = conjgrad(A, b, x, tol)
         rsold = rsnew;
     end
 end
-
-
