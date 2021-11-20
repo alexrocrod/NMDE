@@ -105,8 +105,6 @@ for h=hs1
 %         b2 = b*yi;
 %         yi = conjgrad(A2,b2,yi,tol);
 %     end
-
-
     res(:,iola) = yi;
     iola = iola + 1;    
 end
