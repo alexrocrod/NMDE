@@ -8,13 +8,20 @@ close all
 clear all
 
 %% Question 4
+
+% load("exact_solution.txt")
+% t_exact = exact_solution(:,1);
+% y_exact = exact_solution(:,2);
+
 y_exact = load("accurate_solution.txt");
 
-method = 2; % 0 - RK4 stability,  1 - ODE45, 2 - Crank-Nicolson, 3 - BDF3
+use_conjgrad=true;
+
+method = 1; % 0 - RK4 stability,  1 - ODE45, 2 - Crank-Nicolson, 3 - BDF3
 
 % y' = -Ay;
 %% Constants
-nx = 100;
+nx = 100; %100;
 
 G = numgrid ( 'S' , nx ) ;
 A = delsq(G) * ( nx-1)^2 ;
@@ -28,6 +35,12 @@ N = length(ts);
 y = zeros(N,N);
 y(1,:) = ones(1,N);
 
+if nx ~= 100
+    disp('Starting exact solution computation')
+    tic
+    y_exact = expm(-0.1*A)*ones(N,1);
+    toc
+end
 f = @(x) -A*x';
 
 ords = 3:5;
@@ -68,6 +81,8 @@ if method == 2
     disp('Starting CN')
 
     for h = hs1
+        ola1 = now;
+        datetime(ola1,'ConvertFrom','datenum')
         T = 0.1;
         ts = h:h:T;
         N2 = length(ts);
@@ -78,16 +93,26 @@ if method == 2
         tic
         A2 = eye(N) + A * h/2;
         b = eye(N) - A * h/2;
-
-        fprintf('ConjGrad , h=%d, Nsteps = %d \n', h, N2)
-        tol = h^3;
-        for i=2:N2
-            b2 = b * yi;
-            yi = conjgrad(A2, b2, yi, tol);
+        if ~use_conjgrad
+             % Matlab \ :
+            fprintf('Matlab \\ , h=%d, Nsteps = %d \n', h, N2)
+            for i=2:N2
+                b2 = b * yi;
+                yi = A2\b2;
+            end
+            error = yi-y_exact;
+            fprintf('Matlab \\, Nsteps = %d, error = %d \n', N2, norm(error, inf))
+        else
+            % Conjugate Gradient:
+            fprintf('ConjGrad , h=%d, Nsteps = %d \n', h, N2)
+            tol = h^3;
+            for i=2:N2
+                b2 = b * yi;
+                yi = conjgrad(A2, b2, yi, tol);
+            end
+            error = yi-y_exact;
+            fprintf('ConjGrad, Nsteps = %d, error = %d \n', N2, norm(error, inf))
         end
-        error = yi-y_exact;
-        fprintf('ConjGrad, Nsteps = %d, error = %d \n', N2, norm(error, inf))
-        
         toc   
     end
 end
@@ -118,16 +143,24 @@ if method == 3
 
         tic
         A2 = eye(N) + 6/11 * h * A;
-        
-        fprintf('ConjGrad , h=%d, Nsteps = %d \n',h,N2)
-        tol = h^3;
-        for i = 1:N2-3
-            b2 = 18/11 * y(i+2,:)' - 9/11 * y(i+1,:)' + 2/11 * y(i,:)';
-            y(i+3,:) = conjgrad(A2, b2, y(i+3,:)', tol);
+        if ~use_conjgrad
+            fprintf('Matlab \\, h=%d, Nsteps = %d \n',h,N2)
+            for i = 1:N2-3
+                b2 = 18/11 * y(i+2,:)' - 9/11 * y(i+1,:)' + 2/11 * y(i,:)';
+                y(i+3,:) = A2\b2;
+            end
+            error = y(end,:)'-y_exact;
+            fprintf('Matlab \\, Nsteps = %d, error = %d \n', N2, norm(error, inf))
+        else
+            fprintf('ConjGrad , h=%d, Nsteps = %d \n',h,N2)
+            tol = h^3;
+            for i = 1:N2-3
+                b2 = 18/11 * y(i+2,:)' - 9/11 * y(i+1,:)' + 2/11 * y(i,:)';
+                y(i+3,:) = conjgrad(A2, b2, y(i+3,:)', tol);
+            end
+            error = y(end,:)'-y_exact;
+            fprintf('ConjGrad, Nsteps = %d, error = %d \n', N2, norm(error, inf))
         end
-        error = y(end,:)'-y_exact;
-        fprintf('ConjGrad, Nsteps = %d, error = %d \n', N2, norm(error, inf))
-        
         toc
     end
 end
@@ -140,10 +173,10 @@ function x = conjgrad(A, b, x, tol)
     rsold = r' * r;
 
     for i = 1:length(b)
-        z = A * p;
-        alpha = rsold / (z' * p);
+        Ap = A * p;
+        alpha = rsold / (p' * Ap);
         x = x + alpha * p;
-        r = r - alpha * z;
+        r = r - alpha * Ap;
         rsnew = r' * r;
         if sqrt(rsnew) < tol
               break
