@@ -10,7 +10,6 @@
 \usepackage{amssymb}
 \usepackage{float}
 
-
 \graphicspath{ {./images/} }
 \geometry{left=2.5cm, right=2.5cm, top=2.5cm, bottom=3cm}
 
@@ -106,13 +105,13 @@
 			\begin{equation}
 				h\lambda > -2
 			\end{equation}
-			We found $ \lambda $ using \texttt{lambda = -eigs(A,1,’lm’)} to be $ \lambda = -7.838826244759039\times 10^{4} $.
-			This gives us a theoretical value $h_{max} = 2.551402388000602\times 10^{-5} $. 
+			We found $ \lambda $ using \texttt{lambda = -eigs(A,1,’lm’)} to be $ \lambda = -7.8388262\times 10^{4} $.
+			This gives us a theoretical value $h_{max} = 2.55140238\times 10^{-5} $. 
 			
 			I tested various values of $h$ around this value. 
-			I found that the method produced error, i.e. NaN values for $h> $.
+			I found that the method produced error, i.e. NaN values for $h > 3.5\times 10^{-5} $.
 			This although does not show the real point of instability.
-			The error increases to very significant values of around $ $ for  $h> $.
+			The error increases to very significant values of around $ 0.2 $ for  $h> $.
 			
 			
 			

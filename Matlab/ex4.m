@@ -75,7 +75,6 @@ if method == 0
         toc
 
     end
-    tab = [hs' errors]
     plot(hs, errors)
     return %end sricpt 
 end
