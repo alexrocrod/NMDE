@@ -36,14 +36,10 @@ hs1 = 10.^-ords;
 %% Stability with RK4
 if method == 0
     format shortEng
-    h_max_teo = -2/lambda;
-    hs = linspace(h_max_teo/2, h_max_teo*3/2,10);
-%     hs = linspace(h_max_teo, h_max_teo*3/2,10);
-%     hs = linspace(3.543614e-05, 3.685359e-05,10);
-%     hs = linspace(3.54e-05, 3.6e-05,10);
-%     hs = linspace(3.555e-05, 3.56e-05,10);
-%     hs = linspace(3.556e-05, 3.557e-05,10);
-%     hs = linspace(3.55656e-05, 3.55667e-05,10);
+    h_max_teo = -2.78529/lambda;
+    hs = linspace(h_max_teo*0.9, h_max_teo*1.1,10);
+%     hs = linspace(h_max_teo*0.99, h_max_teo*1.01,10);
+%     hs = linspace(h_max_teo*0.999, h_max_teo*1.001,10);
     errors = zeros(10,1);
     ys = zeros(10,N);
     ih = 1;
@@ -66,12 +62,7 @@ if method == 0
             fprintf('NaN found for h=%d\n',h);
             break
         end
-        if errors(ih) > 0.5
-            fprintf('Large error found for h=%d\n',h);
-            break
-        end
         ih = ih + 1;
-%         fprintf('RK4, Nsteps = %d, error = %d \n', 1, norm(error, inf))
         toc
 
     end

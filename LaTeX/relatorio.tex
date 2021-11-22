@@ -101,37 +101,64 @@
 	
 	\subsection*{Question 4}
 		\subsubsection*{Stability for RK4}
-			As found and explained in this course unit slides, we know that the maximum value of $ h $ can be related to the largest modulus eigenvalue with the following relation:
+			As explained in the reference book \ref{book} on pages 19 and 20, we have the 4-th order Runge-Kutta method as:
 			\begin{equation}
-				h\lambda > -2
+				y_{n+1} = (1 + \frac{1}{6}hk_1 + \frac{1}{3}hk_2 + \frac{1}{3}hk_3 + \frac{1}{6}hk_4)y_n
 			\end{equation}
-			We found $ \lambda $ using \texttt{lambda = -eigs(A,1,’lm’)} to be $ \lambda = -7.8388262\times 10^{4} $.
-			This gives us a theoretical value $h_{max} = 2.55140238\times 10^{-5} $. 
+			, where
+			\begin{align}
+					k1 &= f(y_{n}) \\
+					k2 &= f(y_{n} + \frac{h}{2} k_1) \\
+					k3 &= f(y_{n} + \frac{h}{2} k_2) \\
+					k4 &= f(y_{n} + h k_3)
+			\end{align}
+		
+			Using $ \bar{h} = h\lambda $, we can simplify this equation to:
+			\begin{equation}
+				y_{n+1} = (1 + \bar{h} + \frac{1}{2}\bar{h}^2 + \frac{1}{6}\bar{h}^3 + \frac{1}{24}\bar{h}^4)y_n
+			\end{equation}
+			The relation of the current iteration value $y_n$ with the initial value $y_0$ is:
+			\begin{equation}
+				y_{n+1} = (1 + \bar{h} + \frac{1}{2}\bar{h}^2 + \frac{1}{6}\bar{h}^3 + \frac{1}{24}\bar{h}^4)^n y_o
+			\end{equation}
+		
+			This implies the absolute stability region satisfies the following inequality:
+			\begin{equation}
+				|1 + \bar{h} + \frac{1}{2}\bar{h}^2 + \frac{1}{6}\bar{h}^3 + \frac{1}{24}\bar{h}^4| < 1 
+			\end{equation}
+			Assuming $h$ as a real number we have the following stability region:
+			\begin{equation}
+				-2.78529 < \bar{h} < 0
+			\end{equation}
+			
+			This can be extended to a system of ODEs by using the largest modulus eigenvalue as $ \lambda $ found using \texttt{lambda = -eigs(A,1,’lm’)} to be $ \lambda = -7.8388262\times 10^{4} $.		
+			
+			This gives us a theoretical value $h_{max} = \frac{-2.78529}{-7.8388262\times 10^{4}} = 3.5531978\times 10^{-5} $. 
 			
 			I tested various values of $h$ around this value. 
-			I found that the method produced error, i.e. NaN values for $h > 3.5\times 10^{-5} $.
-			This although does not show the real point of instability.
-			The error increases to very significant values of around $ 0.2 $ for  $h> $.
+			I found that the method produced \texttt{NaN} values for $h > 3.6\times 10^{-5} $.
+			The error for $ h = h_{max}$ was $error_{h_{max}} = 0.2231543$ .
+			The experimental $h_{max}$ I found to be in the region: $ 3.55596 \times 10^{-5} < h_{max} < 3.55675 \times 10^{-5}$
+			This was noticeable because the error increased from $ 0.22624 $ to $ 5.1645 $.
 			
 			
-			
-	
-	\begin{table}[H]
-		\centering
-		\begin{tabular}{c|c|c|c}
-			\textbf{Method} & \textbf{Number of steps} 	& \textbf{Error}  				& \textbf{CPU time (secs)}  	\\ \hline
-			ODE45 			& 9445 						& $ 1.155269\times 10^{-5} $ 	& $ 8.791882 s $ 	\\ \hline 
-			CN 				& 100 						& $ 4.467899\times 10^{-3} $ 	& $ 208.038764 s $ 				\\ \hline
-			CN 				& 1000 						& $ 4.441078\times 10^{-4} $ 	& $ 514.197773 s $ 				\\ \hline
-			CN 				& 10000 					& $ 4.438412\times 10^{-5} $ 	& $ 3086.958397 s $				\\ \hline
-			BDF3 			& 100				 		& $ 4.482679\times 10^{-3} $ 	& $ 188.455409 s $ 				\\ \hline
-			BDF3 			& 1000						& $ 4.442484\times 10^{-4} $ 	& $ 557.765280 s $ 				\\ \hline
-			BDF3 			& 10000 					& $ 4.438552\times 10^{-5} $ 	& $ 3399.768021 s $ 			\\ \hline
-		\end{tabular}
-	\end{table}
+	\subsubsection*{Results}
+		\begin{table}[H]
+			\centering
+			\begin{tabular}{c|c|c|c}
+				\textbf{Method} & \textbf{Number of steps} 	& \textbf{Error}  				& \textbf{CPU time (secs)}  	\\ \hline
+				ODE45 			& 9445 						& $ 1.155269\times 10^{-5} $ 	& $ 8.791882 s $ 	\\ \hline 
+				CN 				& 100 						& $ 4.467899\times 10^{-3} $ 	& $ 208.038764 s $ 				\\ \hline
+				CN 				& 1000 						& $ 4.441078\times 10^{-4} $ 	& $ 514.197773 s $ 				\\ \hline
+				CN 				& 10000 					& $ 4.438412\times 10^{-5} $ 	& $ 3086.958397 s $				\\ \hline
+				BDF3 			& 100				 		& $ 4.482679\times 10^{-3} $ 	& $ 188.455409 s $ 				\\ \hline
+				BDF3 			& 1000						& $ 4.442484\times 10^{-4} $ 	& $ 557.765280 s $ 				\\ \hline
+				BDF3 			& 10000 					& $ 4.438552\times 10^{-5} $ 	& $ 3399.768021 s $ 			\\ \hline
+			\end{tabular}
+		\end{table}
 
-	% Are the error for CN and BDF3 consistent with the theory?
-	% What is the best method for a given accuracy?
+		% Are the error for CN and BDF3 consistent with the theory?
+		% What is the best method for a given accuracy?
 	
 	\subsection*{Question 5}
 	
