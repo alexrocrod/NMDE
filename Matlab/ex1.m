@@ -49,8 +49,7 @@ end
 %         y(i) = y(i-1) + h/6 * (k1 + 2*k2 + 2*k3 + k4);
 % end
 
-y=y';
-error = abs(y-y_exact);
+error = abs(y'-y_exact);
 plot(ts,error,'.')
 xlabel("time")
 ylabel("absolute error")
