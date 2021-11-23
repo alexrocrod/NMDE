@@ -102,8 +102,88 @@
 		The error reduces with the increase of the number of steps (decrease of $h$) as expected in theory.		
 		
 		\subsection*{Question 3}
-		
-		
+			\subsubsection*{BDF2 derivation}
+				The usual form of the ODE:
+				\begin{align}
+					y'(t) &= f(t, y(t)) \\
+					y(t_0) &= y_0
+				\end{align}
+				Writing this ODE on a point $t_{n+k}$:
+				\begin{equation}
+					y'(t_{n+k}) = f(t_{n+k}, y_{n+k}) 
+				\end{equation}
+				The general expression of the Backward Differentiation Formulas is:
+				\begin{equation}
+					\sum_{j=0}^{k}\alpha_j y_{n+j} = h \beta_k f(t_{n+k}, y_{n+k}) \quad \beta_{k-1} = \ldots = \beta_0 = 0.
+				\end{equation}
+				To obtain the BDF2 formula I will interpolate the function $y(t)$ using the points $(t_{n}, y_{n})$, $(t_{n+1}, y_{n+1})$,$(t_{n+2}, y_{n+2})$.
+				The resulting polynomial $P(t)$ is
+				\begin{equation}
+					P(t) = y_n \frac{(t - t_{n+1})(t - t_{n+2})}{2h^2} + y_{n+1} \frac{(t - t_n)(t - t_{n+2})}{-h^2} + y_{n+2} \frac{(t - t_n)(t - t_{n+1})}{2h^2}
+				\end{equation}
+				$P'(t_{n+2})$ is then used to approximate $y'(t_{n+2})$
+				\begin{equation}
+					P'(t) = \frac{1}{2h^2} y_n(t-t_{n+1}) - \frac{1}{h^2} y_{n+1}(t-t_{n}) + \frac{1}{2h^2} y_{n+2}[(t-t_{n})+(t-t_{n+1})] + terms \ (t-t_{n+2})
+				\end{equation}
+				The terms with $t-t_{n+2}$ are ommited because they are null for $t = t_{n-2}$.
+				\begin{align}
+					P'(t_{n+2}) &= \frac{1}{2h^2} y_n(t_{n+2}-t_{n+1}) - \frac{1}{h^2} y_{n+1}(t_{n+2}-t_{n}) + \frac{1}{2h^2} y_{n+2}[(t_{n+2}-t_{n})+(t_{n+2}-t_{n+1})] \\
+					P'(t_{n+2}) &= \frac{1}{2h^2} y_n h - \frac{1}{h^2} y_{n+1} 2h + \frac{1}{2h^2} y_{n+2}[2h+h] \\
+					P'(t_{n+2}) &= \frac{1}{2h} y_n - \frac{2}{h} y_{n+1} + \frac{3}{2h} y_{n+2} \\
+				\end{align}
+				The BDF2 formula can be derived from
+				\begin{align}
+					P'(t_{n+2}) &= f(t_{n+2},y_{n+2}) \\
+					\frac{1}{2h} y_n - \frac{2}{h} y_{n+1} + \frac{3}{2h} y_{n+2} &=  f(t_{n+2},y_{n+2}) \\
+					\frac{3}{2h} y_{n+2} - \frac{2}{h} y_{n+1} + \frac{1}{2h} y_n &=  f(t_{n+2},y_{n+2})
+				\end{align}
+				\begin{equation}
+					y_{n+2} - \frac{4}{3} y_{n+1} + \frac{1}{3} y_n = \frac{2}{3} h f(t_{n+2},y_{n+2}) 
+				\end{equation}
+			
+			\subsubsection*{Truncation Error}
+				The general expression for the interpolation error is 
+				\begin{equation}
+					E(t) = \frac{(t - t_{n+k})\ldots(t - t_{n})f^{(k+1)}(\eta(t))}{(k+1)!}
+				\end{equation}
+				For the BDF2 formula, $ k = 2 $,
+				\begin{equation}
+					E(t) = \frac{(t - t_{n+2})(t - t_{n+1})(t - t_{n})f^{(3)}(\eta(t))}{6}
+				\end{equation}
+				The local truncation error is obtained using the maximum of the derivative of $|E'(t)|$
+				\begin{align}
+					\left| E'(t) \right| = &\frac{1}{6} \left| -t_{n+2}(t - t_{n+1})(t - t_{n})f^{(3)}(\eta(t)) \right. \\
+					 		& \left. -t_{n+1}(t - t_{n+2})(t - t_{n})f^{(3)}(\eta(t)) \right. \\
+					 		& \left. -t_{n}(t - t_{n+2})(t - t_{n+1})f^{(3)}(\eta(t)) \right. \\
+					 		& \left. -(t - t_{n+2})(t - t_{n+1})(t - t_{n})f^{(4)}(\eta(t))\eta'(t) \right|
+				\end{align}
+				This function $|E'(t)|$ has its maximum value for $ t = t_n$ or $ t = t_{n+1}$ or $ t = t_{n+2}$.
+				Choosing $t = t_{n}$ we simplify it to
+				\begin{align}
+					|E'(t_{n})| &= \left|\frac{- t_{n}(t_{n} - t_{n+2})(t_{n} - t_{n+1})f^{(3)}(\eta(t_{n}))}{6}\right| \\
+							&= \left|\frac{- t_{n}(-2h)(-h)f^{(3)}(\eta(t_{n}))}{6}\right| \\
+							&= \frac{h^2}{3}\left|t_nf^{(3)}(\eta(t_n))\right| 
+				\end{align}
+				The local truncation error can then be approximated, $\tau_n = \frac{h^2}{3}\left|t_nf^{(3)}(\eta(t_n))\right| \approx O(h^2) $
+			
+			\subsubsection*{Absolute stability}
+				The characteristic polynomial for the BDF2 method is
+				\begin{equation}
+					t^2 (3 - 2 \bar{h}) - 4t + 1 = 0
+				\end{equation}
+				with roots
+				\begin{equation}
+					t_{12} =  \frac{2 \pm \sqrt{1+2\bar{h}}}{3-\bar{h}}
+				\end{equation}
+				
+				For $-\frac{1}{2} \le \bar{h} < 0, t_{12}$ are both real, $t_{1} \le t_1(\bar{h}=-\frac{1}{2})= 0.5$ and $t_{2} < t_2(\bar{h}=0)= 1$.
+				Since the roots are less then 1 for the interval $-\frac{1}{2} \le h < 0$, the method is A-stable in this interval.
+				
+				For $\bar{h} <-\frac{1}{2},  t_{12}$ are complex and $t_{12} < t_{12}(\bar{h}=-\frac{1}{2})= 0.5$.
+				Since the roots are less then 1 for the interval $\bar{h} <-\frac{1}{2}$, the method is A-stable also in this interval.
+				
+				I can hereby conclude that the method is A-stable for $\bar{h} \in (-\infty,0)$.
+						
 		\subsection*{Question 4}
 			\subsubsection*{Stability for RK4}
 				As explained in the reference book \ref{book} on pages 19 and 20, we have the 4-th order Runge-Kutta method as:
@@ -149,7 +229,7 @@
 				
 				I tested various values of $h$ around this value. 
 				I found that the method produced \texttt{NaN} values for $h > 3.6\times 10^{-5} $.
-				The error for $ h = h_{max}$ was $error_{h_{max}} = 0.2231543$ .
+				The error for $ h = h_{max}$ was $error(h_{max}) = 0.2231543$ .
 				The experimental $h_{max}$ I found to be in the region: $ 3.55596 \times 10^{-5} < h_{max} < 3.55675 \times 10^{-5}$
 				This was noticeable because the error increased from $ 0.22624 $ to $ 5.1645 $.
 				
