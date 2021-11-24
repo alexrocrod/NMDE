@@ -10,7 +10,7 @@ clear all
 %% Question 4
 y_exact = load("accurate_solution.txt");
 
-method = 0; % 0 - RK4 stability,  1 - ODE45, 2 - Crank-Nicolson, 3 - BDF3
+method = 2; % 0 - RK4 stability,  1 - ODE45, 2 - Crank-Nicolson, 3 - BDF3
 
 % y' = -Ay;
 %% Constants

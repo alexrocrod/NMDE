@@ -13,50 +13,55 @@
 \graphicspath{ {./images/} }
 \geometry{left=2.5cm, right=2.5cm, top=2.5cm, bottom=3cm}
 
-\begin{document}
-	% Upload all the source files and a report containing:
-	% Answer to theoretical questions,
-	% a brief description of the methods,
-	% some comments to the results
-	% all the outputs.
-	
+\begin{document}	
 	\title{Exercise \# 1. Numerical methods for ODES. }
 	\author{{\small Alexandre Rodrigues (2039952)}}
 	\date{\today}
 	
 	\maketitle
 	
-	
-	\section*{Methods}
-		In this exercise I used the following methods to solve Ordinary Differential Equations:
-		
-		\subsection*{Simpson's Method}
-		
-		\subsection*{4-stage Runge-Kutta method (RK4)}
-		
-		\subsection*{Backwards Differentiation Formulas (BDF)}
-		
-		\subsection*{Crank Nicolson (CN)}
-		
-		
-	
-	
 	\section*{Answers}
-		% answer to theoretical questions
 		\subsection*{Question 1}
-		
+		The Simpson's method is $\ldots$.
 		\begin{equation}
-			y(t) = e^{-5t}
+			y_{n+2} = y_n + \frac{h}{3}\left( f_n + 4 f_{n+1} + f_{n+2} \right)
 		\end{equation}
+
+		The Ordinary Differential Equation to solve in this question is 
+		\begin{equation}
+			y'(t) = -5y(t) = f(t_n,y_n)	\quad y(0) =1.
+		\end{equation}
+		
+		To solve this ODE with the Simpson's method the value of $ y_1 = y(h) $ also needs to be determined.
+		One approach is to use the Forward Euler, in the following way:
+		\begin{equation}
+			y_1 = y(t = h) = y(0) + h f(0,y(0))
+		\end{equation}
+	
+		Another method one can use is the 4-th order Runge Kutta, given by the following equations
+		\begin{align}
+			k_1 &= f(0,y(0)) \\
+			k_2 &= f\left(\frac{h}{2},y(0) + \frac{h}{2}k_1\right) \\
+			k_3 &= f\left(\frac{h}{2},y(0) + \frac{h}{2}k_2\right)\\
+			k_4 &= f\left(h,y(0) + hk_3\right) \\
+			y_1 = y(t = h) &= y(0) + \frac{h}{6} \left(k_1 + 2k_2 + 2k_3 + k_4 \right)
+		\end{align}
+		
+		
+		The results of the computations were then compared with the exact solution
+		\begin{equation}
+			y(t) = e^{-5t},
+		\end{equation}
+		to understand the influence of the methods used to compute $y(h)$.
 		
 		\begin{figure}[H]
 			\centering
 			\includegraphics[width=\linewidth]{ex1_fe.jpg}
-			\caption{Absolute error in function of time using Forward Euler method to compute y(1)}
+			\caption{Absolute error in function of time using Forward Euler method to compute $y_1$}
 			\label{fig:ex1_fe}
 		\end{figure}
 		
-		The final error was $4.2916 \times 10^{10}$.
+		The final error when using the Forward Euler to compute $y_1$ is $4.2916 \times 10^{10}$.
 		
 		\begin{figure}[H]
 			\centering
@@ -65,19 +70,32 @@
 			\label{fig:ex1_rk4}
 		\end{figure}
 		
-		The final error was $4.3146 \times 10^{10}$.
+		The final error when using the 4-th order Runge Kutta method to compute $y_1$ is $4.3146 \times 10^{10}$.
 		
-		The Simpson's method has an empty stability region as proved by: $\ldots$
-		We can notice the difference in the initial conditions in our results.
-		The FE calculation for y(2) is better then the RK4 calculation given the best final error.
-		This is, although, not relevant because the difference is of about $ 0.5 \times 10^{-10} \% $.
+		The Simpson's method has an empty stability region, which explains the large final error.
+		The FE calculation for $y_1$ is better then the RK4 calculation given the lower final error.
+		This is, although, not very relevant because the difference is of about $ 0.5 \times 10^{-10} \% $.
 		
 		\subsection*{Question 2}
-		
-		The exact solution can be found as:
+		The method used for this question is the 4-th order Runge Kutta method defined by
+		\begin{align}
+			k_1 &= f(t_n,y_n) \\
+			k_2 &= f\left(t_n+\frac{h}{2},y_n + \frac{h}{2}k_1\right) \\
+			k_3 &= f\left(t_n+\frac{h}{2},y_n + \frac{h}{2}k_2\right)\\
+			k_4 &= f\left(t_n+h,y_n + hk_3\right) \\
+			y_{n+1} &= y_n + \frac{h}{6} \left(k_1 + 2k_2 + 2k_3 + k_4 \right)
+		\end{align}
+	
+		The Ordinary Differential Equation to solve in this question is 
 		\begin{equation}
-			y(t) = \frac{1}{10t + 1}
+			y'(t) = -10y^2(t) = f(t_n,y_n)	\quad y(0) =1.
 		\end{equation}
+	
+		The exact solution
+		\begin{equation}
+			y(t) = \frac{1}{10t + 1},
+		\end{equation}
+		which will be used to compute the error as the difference between the exact and the experimental solutions.
 		
 		\begin{figure}[H]
 			\centering
@@ -96,10 +114,11 @@
 				$ 3.906250\times 10^{-3} $ & $ 7.312862\times 10^{-11} $ \\ \hline
 				$ 1.953125\times 10^{-3} $ & $ 4.579586\times 10^{-12} $ \\ \hline
 				$ 9.765625\times 10^{-4} $ & $ 2.863750\times 10^{-13} $ \\ \hline
+				\label{table:ex2}
 			\end{tabular}
 		\end{table}
-		
-		The error reduces with the increase of the number of steps (decrease of $h$) as expected in theory.		
+	
+		In figure \ref{fig:ex2} and table \ref{table:ex2}, you can see the clear decrease in the final error with the increase of the number of steps (halving $h$) as expected in theory.		
 		
 		\subsection*{Question 3}
 			\subsubsection*{BDF2 derivation}
@@ -164,7 +183,7 @@
 							&= \left|\frac{- t_{n}(-2h)(-h)f^{(3)}(\eta(t_{n}))}{6}\right| \\
 							&= \frac{h^2}{3}\left|t_nf^{(3)}(\eta(t_n))\right| 
 				\end{align}
-				The local truncation error can then be approximated, $\tau_n = \frac{h^2}{3}\left|t_nf^{(3)}(\eta(t_n))\right| \approx O(h^2) $
+				The local truncation error can then be approximated, $T_n = \frac{h^2}{3}\left|t_nf^{(3)}(\eta(t_n))\right| \approx O(h^2) $
 			
 			\subsubsection*{Absolute stability}
 				The characteristic polynomial for the BDF2 method is
@@ -186,7 +205,7 @@
 						
 		\subsection*{Question 4}
 			\subsubsection*{Stability for RK4}
-				As explained in the reference book \ref{book} on pages 19 and 20, we have the 4-th order Runge-Kutta method as:
+				The 4-th order Runge-Kutta method, as showed before, is defined by
 				\begin{equation}
 					y_{n+1} = (1 + \frac{1}{6}hk_1 + \frac{1}{3}hk_2 + \frac{1}{3}hk_3 + \frac{1}{6}hk_4)y_n
 				\end{equation}
@@ -195,8 +214,8 @@
 						k1 &= f(y_{n}) \\
 						k2 &= f(y_{n} + \frac{h}{2} k_1) \\
 						k3 &= f(y_{n} + \frac{h}{2} k_2) \\
-						k4 &= f(y_{n} + h k_3)
-					\end{align}
+						k4 &= f(y_{n} + h k_3).
+				\end{align}
 			
 				Using $ \bar{h} = h\lambda $, one can simplify this equation to:
 				\begin{equation}
@@ -226,32 +245,43 @@
 					0 < h < 3.5531978\times 10^{-5} 
 				\end{equation}
 			 
-				
-				I tested various values of $h$ around this value. 
-				I found that the method produced \texttt{NaN} values for $h > 3.6\times 10^{-5} $.
+				I tested various values of $h$ around this value and found that the method produced \texttt{NaN} values for $h > 3.6\times 10^{-5} $.
 				The error for $ h = h_{max}$ was $error(h_{max}) = 0.2231543$ .
 				The experimental $h_{max}$ I found to be in the region: $ 3.55596 \times 10^{-5} < h_{max} < 3.55675 \times 10^{-5}$
 				This was noticeable because the error increased from $ 0.22624 $ to $ 5.1645 $.
 				
 				
-		\subsubsection*{Results}
-			\begin{table}[H]
-				\centering
-				\begin{tabular}{c|c|c|c}
-					\textbf{Method} & \textbf{Number of steps} 	& \textbf{Error}  				& \textbf{CPU time (secs)}  	\\ \hline
-					ODE45 			& 9445 						& $ 1.155269\times 10^{-5} $ 	& $ 8.791882 s $ 	\\ \hline 
-					CN 				& 100 						& $ 4.467899\times 10^{-3} $ 	& $ 208.038764 s $ 				\\ \hline
-					CN 				& 1000 						& $ 4.441078\times 10^{-4} $ 	& $ 514.197773 s $ 				\\ \hline
-					CN 				& 10000 					& $ 4.438412\times 10^{-5} $ 	& $ 3086.958397 s $				\\ \hline
-					BDF3 			& 100				 		& $ 4.482679\times 10^{-3} $ 	& $ 188.455409 s $ 				\\ \hline
-					BDF3 			& 1000						& $ 4.442484\times 10^{-4} $ 	& $ 557.765280 s $ 				\\ \hline
-					BDF3 			& 10000 					& $ 4.438552\times 10^{-5} $ 	& $ 3399.768021 s $ 			\\ \hline
-				\end{tabular}
-			\end{table}
-	
-			% Are the error for CN and BDF3 consistent with the theory?
-			% What is the best method for a given accuracy?
-		
+			\subsubsection*{Results}
+			
+				The following table shows the error and CPU elapsed time for each of the methods used and each of the different numbers of steps.
+				
+				\begin{table}[H]
+					\centering
+					\begin{tabular}{c|c|c|c}
+						\textbf{Method} & \textbf{Number of steps} 	& \textbf{Error}  				& \textbf{CPU time (secs)}  	\\ \hline
+						ODE45 			& 9445 						& $ 1.155269\times 10^{-5} $ 	& $ 8.791882 s $ 				\\ \hline 
+						CN 				& 100 						& $ 4.467899\times 10^{-3} $ 	& $ 208.038764 s $ 				\\ \hline
+						CN 				& 1000 						& $ 4.441078\times 10^{-4} $ 	& $ 514.197773 s $ 				\\ \hline
+						CN 				& 10000 					& $ 4.438412\times 10^{-5} $ 	& $ 3086.958397 s $				\\ \hline
+						BDF3 			& 100				 		& $ 4.482679\times 10^{-3} $ 	& $ 188.455409 s $ 				\\ \hline
+						BDF3 			& 1000						& $ 4.442484\times 10^{-4} $ 	& $ 557.765280 s $ 				\\ \hline
+						BDF3 			& 10000 					& $ 4.438552\times 10^{-5} $ 	& $ 3399.768021 s $ 			\\ \hline
+					\end{tabular}
+				\end{table}
+				
+				For the Crank Nicolson method and the BDF3 formula the error is approximately $error \approx 4.4 h$.
+				The BDF3 formula produced slightly larger errors than the error of the Crank Nicolson method.
+				These 2 methods are very comparable in speed and final error.
+				
+				The Matlab method ODE45 has lower error than the others with $ 10000 $ steps.
+				It is also noticeably faster, even when compared with the others using $ 100 $ steps.
+				It is the clear choice to solve this ODE.
+				
+				For $100$ steps I would use the BDF3 formula, it has a slightly larger error but finished 20 seconds faster.
+				For $1000$ steps I would use the CN method, it has a slightly smaller error and finished 43 seconds faster.
+				For $10000$ steps the choice is also the CN method, it has a slightly smaller error and finished 313 seconds faster.
+				There is no clear choice between CN and BDF3 for any accuracy or time constraint. 
+				
 		\subsection*{Question 5}
 		
 		\begin{figure}[H]
@@ -261,12 +291,6 @@
 			\label{fig:ex5}
 		\end{figure}
 
-	
-	\section*{Results}
-	% comments to the results
-	
-	
-	\section*{Outputs}
 	
 	
 	
