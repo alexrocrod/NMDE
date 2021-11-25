@@ -13,7 +13,7 @@ y_exact = load("accurate_solution.txt");
 method = 2; % 0 - RK4 stability,  1 - ODE45, 2 - Crank-Nicolson, 3 - BDF3
 
 % y' = -Ay;
-%% Constants
+%% Variables
 nx = 100;
 
 G = numgrid ( 'S' , nx ) ;
@@ -21,7 +21,7 @@ A = delsq(G) * ( nx-1)^2 ;
 lambda = -eigs(A,1,'lm');
 
 T = 0.1;
-h=T/length(A);
+h = T/length(A);
 ts = h:h:T;
 
 N = length(ts);
@@ -37,16 +37,20 @@ hs1 = 10.^-ords;
 if method == 0
     format shortEng
     h_max_teo = -2.78529/lambda;
+
     hs = linspace(h_max_teo*0.9, h_max_teo*1.1,10);
 %     hs = linspace(h_max_teo*0.99, h_max_teo*1.01,10);
 %     hs = linspace(h_max_teo*0.999, h_max_teo*1.001,10);
+
     errors = zeros(10,1);
     ys = zeros(10,N);
     ih = 1;
-    for h=hs
+
+    for h = hs
         fprintf('RK4, i=%d,  h=%d\n', ih, h);
         tic
-        for i=2:N
+
+        for i = 2:N
             k1 = f(y(i-1,:));
             k2 = f(y(i-1,:)+k1'.*h/2);
             k3 = f(y(i-1,:)+h/2.*k2');
@@ -54,14 +58,17 @@ if method == 0
                 
             y(i,:) = y(i-1,:) + h/6 * (k1 + 2*k2 + 2*k3 + k4)';
         end
+
         yf = y(end,:)';
         errors(ih) = norm(yf - y_exact, inf);
         ys(ih,:) = y(end,:);
         tab = [hs' errors]
+
         if any(isnan(ys(ih,:)))
             fprintf('NaN found for h=%d\n',h);
             break
         end
+
         ih = ih + 1;
         toc
 
@@ -74,12 +81,14 @@ end
 if method == 1
     disp('Starting ODE45')
     tic
+    
     tspan = [0 0.1];
     [t,y] = ode45(@(t,y) -A*y, tspan, y(1,:));
     yf = y(end,:)';
     error = yf - y_exact;
-    fprintf('ODE45, Nsteps = %d, error = %d \n', length(t), norm(error, inf))
+
     toc
+    fprintf('ODE45, Nsteps = %d, error = %d \n', length(t), norm(error, inf))
     plot(ts, abs(error))
     return %end sricpt 
 end
