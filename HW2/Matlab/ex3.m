@@ -8,18 +8,27 @@ close all
 clear all
 
 %% Question 3
-% 
-%
+n = 1e4;
+v = ones(n,1);
+vi = 1:5;
+v(vi) = 200*vi;
 
-%% Variables
+A = diag(v);
+% L = ichol(A);
+L = chol(A);
+n = size(A, 1);
+b = rand(n, 1);
+tol = 1e-8;
+maxit = 200;
 
-%% Compute
+tic
+[x, flag, relres, iter1, resvec1] = pcg( A, b, tol, maxit,L,L')
+toc
+tic
+[x, resvec, iter] = mypcg(A, b, tol, maxit, L);
+toc
 
-%% Compute
-
-
-%% Main Method
-
-
-%% Plot
+semilogy(0:iter, resvec, 'r-*')
+xlabel('Iterations');
+ylabel('Residual Norm');
 
