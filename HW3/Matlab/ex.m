@@ -1,4 +1,4 @@
-%% Exercise # 2 -  Iterative Methods For Linear Systems
+%% Exercise # 3 -  Numerical Solution of the Poisson Problem
 % Course: Numerical Methods For Differential Equations
 % Name: Alexandre da Rocha Rodrigues
 % Matricola: 2039952
@@ -7,7 +7,7 @@
 close all
 clear all
 
-%% Question 4
+%%
 % 
 %
 
