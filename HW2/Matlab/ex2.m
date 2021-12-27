@@ -16,7 +16,8 @@ for nx=nxs
     A = delsq(numgrid('S',nx));
     n = size(A, 1);
     b1 = 1./sqrt(1:n);
-    b = b1';
+    x_exact = b1';
+    b = A * x_exact;
     tol = 1e-8;
     maxit = 5000;
     

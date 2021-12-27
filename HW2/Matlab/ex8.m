@@ -9,17 +9,12 @@ clear all
 
 %% Question 8
 % 
-%
-
-%% Variables
-
-%% Compute
-
-%% Compute
-
-
-%% Main Method
-
-
-%% Plot
+A1=load("ML_laplace.mtx");
+A = spconvert(A1);
+n = size(A, 1);
+x_exact = ones(n,1);
+b = A * x_exact;
+tol = 1e-12;
+maxit = 550;
+x0 = zeros(n,1);
 
