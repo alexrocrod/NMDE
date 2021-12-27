@@ -24,7 +24,6 @@ setup.droptol = 0.01;
 [L,U] = ilu(A,setup);
 
 
-k = 1;
 for restart=[10,20,30,50]
     disp(restart)
     tic
@@ -32,7 +31,7 @@ for restart=[10,20,30,50]
     toc
     totalit = (iter(1)-1)*restart + iter(2)
     residuef = relres
-    k = k+1;
+
     semilogy(0:totalit, resvec(1:totalit+1))
     hold on
     pause(1)

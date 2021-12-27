@@ -18,3 +18,30 @@ tol = 1e-12;
 maxit = 550;
 x0 = zeros(n,1);
 
+restart = 50;
+
+tols = [2e-2,1e-2,3e-3,1e-3,1e-4,1e-5];
+for dtol = tols
+    disp(dtol);
+
+    tic
+    setup.type = 'crout';
+    setup.droptol = dtol;
+    [L,U] = ilu(A,setup);
+    toc
+    
+    tic
+    [x1,flag1,relres,iter,resvec] = gmres(A,b,restart,tol,maxit,L,U);
+    toc
+
+    totalit = (iter(1)-1)*restart + iter(2)
+    residuef = relres
+    rho = (nnz(L) + nnz(U) - n)/nnz(A)
+
+
+    semilogy(0:totalit, resvec(1:totalit+1))
+    hold on
+    pause(0.01)
+
+end
+
