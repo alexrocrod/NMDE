@@ -94,14 +94,14 @@ maxit = 1000;
 % Jacobi
 M = sparse(diag(diag(H)));
 tic
-[x, flag, relres, iter1, resvec1] = pcg(H, f, tol, maxit, M);
+[x1, flag1, relres1, iter1, resvec1] = pcg(H, f, tol, maxit, M);
 toc
 
 % Choledsky
-L = ichol(H);
-tic
-[x, flag, relres, iter2, resvec2] = pcg(H, f, tol, maxit, L, L');
-toc
+% L = ichol(H);
+% tic
+% [x2, flag2, relres, iter2, resvec2] = pcg(H, f, tol, maxit, L, L');
+% toc
 
 
 
@@ -109,17 +109,19 @@ toc
 
 error = 0;
 for i=1:Nn
-    u_exact = 0; %...
-    u_exp = 0; %...
+    xsq = coord(i,1)^2;
+    ysq = coord(i,2)^2;
+    u_exact = xsq + ysq - xsq*ysq -1;
+    u_exp = x1(i);
 
     tris = mod(find(topol==i),40);
     tris(tris==0) = 40; % fix changing 40, 80, 120 to 0
     suma = sum(delta(tris))/3; 
 
-    res = (u_exact - u_exp)^2 * suma;
+    res = (u_exp - u_exact)^2 * suma;
     error = error + res;
 end
-epsilon = sqrt(error);
+epsilon = sqrt(error)
 
 
 
