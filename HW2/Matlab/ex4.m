@@ -12,7 +12,7 @@ A = gallery('wathen',100,100);
 n = size(A, 1);
 b = rand(n,1);
 tol = 1e-8;
-maxit = 5000;
+maxit = 500;
 
 
 % non preconditioned

@@ -14,24 +14,24 @@ clear all
 A = delsq(numgrid('S', 102 ));
 L = ichol(A);
 n = size(A, 1);
-b=A * ones(n, 1);
+b = A * ones(n, 1);
 tol = 1e-8;
-maxit = 200;
+maxit = 750;
 
 %% Main
 
-% Matlab PCG without preconditioner
+% Matlab PCG Without Preconditioner
 tic
-[x, flag, relres, iter1, resvec1] = pcg( A, b, tol, maxit); 
+[x1, flag1, relres1, iter1, resvec1] = pcg( A, b, tol, maxit); 
 toc
-% Matlab PCG with IC(0)
+% Matlab PCG With IC(0)
 tic
-[x, flag, relres, iter2, resvec2] = pcg( A, b, tol, maxit, L, L');
+[x2, flag2, relres2, iter2, resvec2] = pcg( A, b, tol, maxit, L, L');
 toc
 
-% my implementation
+% My PCG Implementation
 tic
-[x, resvec3, iter3] = mypcg(A, b, tol, maxit, L);
+[x3, resvec3, iter3] = mypcg(A, b, tol, maxit, L);
 toc
 semilogy(0:iter1, resvec1, 'r-*', 0:iter2, resvec2,'g-o', 0:iter3, resvec3,'b-+')
 legend('No preconditioner' , 'IC(0)', 'My implementation');

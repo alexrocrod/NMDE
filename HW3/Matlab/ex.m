@@ -24,7 +24,6 @@ Ne = length(topol);
 Nn = length(coord);
 Rmax = 1e15;
 
-
 %% Patter Creation for the Stifness Matrix
 row1 = 1:length(topol);
 row2 = [row1' row1' row1'];
@@ -103,6 +102,7 @@ toc
 % [x2, flag2, relres, iter2, resvec2] = pcg(H, f, tol, maxit, L, L');
 % toc
 
+semilogy(0:iter1,relres1,'r-*')
 
 
 %% Error Computation

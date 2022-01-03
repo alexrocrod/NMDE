@@ -11,9 +11,12 @@ clear all
 % 
 nxs = [102 202 402 802];
 ifig = 1;
+iters = zeros(4,4);
 for nx=nxs
     fprintf('nx = %d\n',nx);
     A = delsq(numgrid('S',nx));
+%     sqk = sqrt(eigs(A,1,'largestabs')/eigs(A,1,'smallestabs'))
+%     sqk = sqrt(eigs(A,1,'largestreal')/eigs(A,1,'smallestreal'))
     n = size(A, 1);
     b1 = 1./sqrt(1:n);
     x_exact = b1';
@@ -41,6 +44,8 @@ for nx=nxs
     L = ichol(A,opts);
     [x, flag, relres, iter4, resvec4] = pcg( A, b, tol, maxit, L, L');
 
+    iters(ifig,:) = [iter1,iter2,iter3,iter4];
+
     % error plots
     figure(ifig);
     semilogy(0:iter1, resvec1, 'r-*', 0:iter2, resvec2,'g-o', 0:iter3, resvec3,'b-+', 0:iter4, resvec4,'k-o')
@@ -49,11 +54,7 @@ for nx=nxs
     ylabel('Residual Norm');
     ifig = ifig + 1;
     pause(1)
-
+    
 end
 
-%Produce a Table with the values of h and the number of (P)CG iterations:
-%one row for each nx value
-
-% h vem de onde??
 
