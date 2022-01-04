@@ -23,18 +23,40 @@ setup.type = 'crout';
 setup.droptol = 0.01;
 [L,U] = ilu(A,setup);
 
+restarts = [10,20,30,50];
+n = length(restarts);
+resvecs = zeros(n,maxit*50);
+totalits = zeros(n,1);
+residuef = zeros(n,1);
+times = zeros(n,1);
 
-for restart=[10,20,30,50]
+idx = 1;
+for restart=restarts
     disp(restart)
     tic
     [x1,flag1,relres,iter,resvec] = gmres(A,b,restart,tol,maxit,L,U);
-    toc
-    totalit = (iter(1)-1)*restart + iter(2)
-    residuef = relres
+    times(idx) = toc;
+    totalit = (iter(1)-1)*restart + iter(2);
+    totalits(idx) = totalit;
+    residuef(idx) = relres;
+    resvecs(idx,1:totalit+1) = resvec(1:totalit+1)';
 
     semilogy(0:totalit, resvec(1:totalit+1))
     hold on
     pause(1)
+    idx = idx+1;
 end
 
+figure(2)
+for i=1:n
+    semilogy(0:totalits(i), resvecs(i,1:totalits(i)+1))
+    
+    hold on
+end
+axis([0 max(totalits) min(min(resvecs~=0)) max(max(resvecs))])
+legend('Restart=10','Restart=20','Restart=30','Restart=50')
+
+format shortEng
+tab = [restarts' totalits residuef times]
+format default
 
