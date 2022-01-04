@@ -15,18 +15,26 @@ n = size(A, 1);
 b1 = 1./sqrt(1:n);
 x_exact = b1';
 b = A * x_exact;
-tol = 1e-8; %1e-10;
+tol = 1e-10; %1e-10;
 maxit = 550;
 x0 = zeros(n,1);
+restart = n;
 
 setup.type = 'crout';
-setup.droptol = 0.1;
+setup.droptol = 0.01;
+tic
+% [L,U] = ilu(A);
 [L,U] = ilu(A,setup);
-
+toc
+tic
+[x, flag, relres, iter1, resvec1] = gmres(A, b, restart, tol, maxit,L,U)
+toc
+tic
 [x, iter, resvec, flag] = myprecgmres(A, b, tol, maxit, x0, L, U);
-
+toc
 norm(b-A*x)
 
+return
 
 %% c) from 3b)
 
@@ -47,12 +55,12 @@ maxit = 200;
 restart = maxit*10;
 
 tic
-[x, flag, relres, iter1, resvec1] = gmres( A, b, restart, tol, maxit,L,L');
-% [x, flag, relres, iter1, resvec1] = gmres( A, b, restart, tol, maxit)
+% [x, flag, relres, iter1, resvec1] = gmres( A, b, restart, tol, maxit,L,L');
+[x, flag, relres, iter1, resvec1] = gmres( A, b, restart, tol, maxit)
 toc
 totalit = (iter1(1)-1)*restart + iter1(2);
 
-% L = eye(size(L));
+L = speye(size(L));
 tic
 [x, resvec, iter] = mypcg(A, b, tol, maxit, L);
 toc

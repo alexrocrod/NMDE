@@ -34,7 +34,8 @@ for dtol = tols
     disp(dtol);
 
     tic
-    setup.type = 'crout';
+%     setup.type = 'crout';
+    setup.type = 'ilutp';
     setup.droptol = dtol;
     [L,U] = ilu(A,setup);
     tprec(idx) = toc;

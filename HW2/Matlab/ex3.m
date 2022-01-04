@@ -28,7 +28,7 @@ tic
 [x, flag, relres, iter1, resvec1] = pcg( A, b, tol, maxit);
 toc
 
-L = eye(size(L));
+L = speye(size(L));
 tic
 [x, resvec, iter] = mypcg(A, b, tol, maxit, L);
 toc

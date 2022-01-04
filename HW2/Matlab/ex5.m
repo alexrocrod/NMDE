@@ -17,17 +17,20 @@ x_exact = b1';
 b = A * x_exact;
 tol = 1e-8; %1e-10;
 maxit = 550;
-x0 = zeros(n,1);
+x0 = ones(n,1);
 
 % matlab GMRES
 restart = 1000;
+tic
 [x1,flag1,relres,iter1,resvec1] = gmres(A,b,restart,tol,maxit);
+toc
 totalit = (iter1(1)-1)*restart + iter1(2);
 
 % my GMRES
-tol = 1e-10;
+tol = 1e-8;
+tic
 [x2, iter2, resvec2, flag2] = mygmres(A,b,tol,maxit,x0);
- 
+toc
 
 semilogy(0:totalit, resvec1(1:totalit+1), 'r-*', 0:iter2, resvec2','g-+')
 legend('Matlab GMRES' , 'My GMRES');
