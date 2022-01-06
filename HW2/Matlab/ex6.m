@@ -26,47 +26,22 @@ tic
 % [L,U] = ilu(A);
 [L,U] = ilu(A,setup);
 toc
-tic
-[x, flag, relres, iter1, resvec1] = gmres(A, b, restart, tol, maxit,L,U)
-toc
-tic
-[x, iter, resvec, flag] = myprecgmres(A, b, tol, maxit, x0, L, U);
-toc
-norm(b-A*x)
-
-return
-
-%% c) from 3b)
-
-clear all
-close all
-
-n = 1e4;
-v = ones(n,1);
-vi = 1:5;
-v(vi) = 200*vi;
-
-A = sparse(diag(v));
-L = ichol(A);
-n = size(A, 1);
-b = rand(n, 1);
-tol = 1e-8;
-maxit = 200;
-restart = maxit*10;
 
 tic
-% [x, flag, relres, iter1, resvec1] = gmres( A, b, restart, tol, maxit,L,L');
-[x, flag, relres, iter1, resvec1] = gmres( A, b, restart, tol, maxit)
+[x1, flag1, relres, iter1, resvec1] = gmres(A, b, restart, tol, maxit,L,U);
 toc
 totalit = (iter1(1)-1)*restart + iter1(2);
+norm(b-A*x1)
 
-L = speye(size(L));
 tic
-[x, resvec, iter] = mypcg(A, b, tol, maxit, L);
+[x2, iter2, resvec2, flag2] = myprecgmres(A, b, tol, maxit, x0, L, U);
 toc
+norm(b-A*x2)
 
-semilogy(0:totalit, resvec1, 'r-*',0:iter, resvec, 'g-+')
-legend('Matlab GMRES' , 'My PCG');
+semilogy(0:totalit, resvec1, 'r-*',0:iter2, resvec2, 'g-+')
+legend('Matlab GMRES' , 'My Prec. GMRES');
 xlabel('Iterations');
 ylabel('Residual Norm');
+
+
 
