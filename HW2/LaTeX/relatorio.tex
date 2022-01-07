@@ -21,84 +21,135 @@
 	
 	\maketitle
 		\section*{Question 1}
-		My implementation is slower to converge...
+			Using as a test the example usage, with $tol = 1 \times 10^{-8}$ and limiting the iterations to $maxit=250$ I got the following results. 
 		
-		
-		
-		
-		\section*{Question 2}
-		
-		
-		The spectral condition number of A is 
-		\begin{equation}
-			k = \frac{\lambda_{max}(A)}{\lambda_{min}(A)}
-		\end{equation}
-	
-		\begin{table}[H]
-			\centering
-			\begin{tabular}{c|c|c|c|c|c|c|c}
-				\textbf{nx} & \textbf{h} 			& \textbf{k} 			 & \textbf{sqrt(k)}	& \textbf{iters CG} & \textbf{iters IC(0)} & \textbf{iters $IC(10^{-2})$} & \textbf{iters $IC(10^{-3})$} \\ \hline
-				$ 102 $ & $ 1.0000 \times 10^{-4} $ & $ 6.0107 \times 10^3 $ & $ 77.5288 $ 		& $ 283 $ & $ 87 $ & $ 45 $ & $ 17 $ \\ \hline
-				$ 202 $ & $ 2.5000 \times 10^{-5} $ & $ 2.3810 \times 10^4 $ & $ 154.3039 $ 	& $ 532 $ & $ 159 $ & $ 78 $ & $ 30 $ \\ \hline
-				$ 402 $ & $ 6.2500 \times 10^{-6} $ & $ 9.4770 \times 10^4 $ & $ 307.8473 $ 	& $ 948 $ & $ 282 $ & $ 137 $ & $ 53 $\\ \hline
-				$ 802 $ & $ 1.5625 \times 10^{-6} $ & $ 3.7814 \times 10^5 $ & $ 614.9304 $ 	& $ 1792 $& $ 533 $ & $ 258 $ & $ 97 $ \\ \hline
-			\end{tabular}
-			\caption{all data}
-			\label{table:ex2}
-		\end{table}	
-	
-		\begin{table}[H]
-			\centering
-			\begin{tabular}{c|c|c|c|c|c}
-				\textbf{nx} & \textbf{h} & \textbf{iters CG} & \textbf{iters IC(0)} & \textbf{iters $IC(10^{-2})$} & \textbf{iters $IC(10^{-3})$} \\ \hline
-				$ 102 $ & $ 1.0000 \times 10^{-4} $ 	& $ 283 $ & $ 87 $ & $ 45 $ & $ 17 $ \\ \hline
-				$ 202 $ & $ 2.5000 \times 10^{-5} $ 	& $ 532 $ & $ 159 $ & $ 78 $ & $ 30 $ \\ \hline
-				$ 402 $ & $ 6.2500 \times 10^{-6} $  	& $ 948 $ & $ 282 $ & $ 137 $ & $ 53 $\\ \hline
-				$ 802 $ & $ 1.5625 \times 10^{-6} $ 	& $ 1792 $& $ 533 $ & $ 258 $ & $ 97 $ \\ \hline
-			\end{tabular}
-			\caption{Iterations for each value of nx}
-			\label{table:ex2-1}
-		\end{table}	
-		
-		$ h = \frac{1}{N} = \frac{1}{(nx-2)^2} $
-		
-		
-		
-		\section*{Question 3}
-		show theoretically ??
-		only 1 iter??
-		
-		
-		Matlab PCG without preconditioning, My PCG with L as identity matrix
-		\textbf{\begin{figure}[H]
+			\begin{figure}[H]
 				\centering
-				\includegraphics[width=.6\linewidth]{ex3_NoPrec.jpg}
-				\caption{semilogy plot ex3 no preconditioning}
-				\label{fig:ex3_NoPrec}
-		\end{figure}}
-	
-		\begin{table}[H]
-			\centering
-			\begin{tabular}{c|c|c|c}
-				\textbf{Method} &  \textbf{Iterations} 	& \textbf{Final Residual} 		& \textbf{Computational Time} 	\\ \hline
-				Matlab PCG		& 			$6$ 		& $ 9.2128 \times 10^{-14} $ 	& $ 0.021 s $	\\ \hline	
-				My PCG 			& 			$5$			& $ 1.2744 \times 10^{-13} $	& $	0.012 s $	\\ \hline
-			\end{tabular}
-			\caption{Iterations for each value of nx, no preconditioning}
-			\label{table:ex3_NoPrec}
-		\end{table}
+				\includegraphics[width=.6\linewidth]{ex1_it250.jpg}
+				\caption{Residual norm vs iteration number for PCG methods, $maxit=250$}
+				\label{fig:ex1_it250}
+			\end{figure}
 		
+			\begin{table}[H]
+				\centering
+				\begin{tabular}{c|c|c|c}
+					\textbf{Method} 					&  \textbf{Iterations} 	& \textbf{Final Residual} 		& \textbf{Computational Time} 	\\ \hline
+					Matlab PCG without preconditioning	& 			$183$ 		& $ 1.9591 \times 10^{-7} $ 	& $ 0.077 s $					\\ \hline
+					Matlab PCG IC(0)					& 			$78$ 		& $ 1.5293 \times 10^{-7} $ 	& $ 0.068 s $					\\ \hline	
+					My PCG implementation				& 			$250$		& $ 2.3 \times 10^{-3} $		& $	0.151 s $					\\
+				\end{tabular}
+				\caption{Results of PCG methods, $maxit=250$}
+				\label{table:ex1_it250}
+			\end{table}
+		
+			When $ maxit $ is large enough to guarantee convergence in all implementations we get the following results:
+			\begin{figure}[H]
+				\centering
+				\includegraphics[width=.6\linewidth]{ex1_it750.jpg}
+				\caption{Residual norm vs iteration number for PCG methods, $maxit=750$}
+				\label{fig:ex1_it750}
+			\end{figure}
+		
+			\begin{table}[H]
+				\centering
+				\begin{tabular}{c|c|c|c}
+					\textbf{Method} 					&  \textbf{Iterations} 	& \textbf{Final Residual} 		& \textbf{Computational Time} 	\\ \hline
+					Matlab PCG without preconditioning	& 			$183$ 		& $ 1.9591 \times 10^{-7} $ 	& $ 0.054 s $					\\ \hline
+					Matlab PCG IC(0)					& 			$78$ 		& $ 1.5293 \times 10^{-7} $ 	& $ 0.063 s $					\\ \hline	
+					My PCG implementation				& 			$720$		& $ 9.6833 \times 10^{-9} $		& $	0.351 s $					\\
+				\end{tabular}
+				\caption{Results of PCG methods, $maxit=750$}
+				\label{table:ex1_it750}
+			\end{table}
+			
+			My implementation is slower to converge but produces better final residual values.
+			
+			
+		\section*{Question 2}
+			The spectral condition number of A is 
+			
+			\begin{equation}
+				\kappa(A) = \frac{\lambda_{max}(A)}{\lambda_{min}(A)}.
+			\end{equation}
+		
+			In Matlab I used the \texttt{condest(A)} function to estimate the condition number of a sparse matrix A.
+		
+			\begin{table}[H]
+				\centering
+				\begin{tabular}{c|c|c|c|c|c|c|c}
+					$n_x$   & $ h $						& $\kappa(A)$			 & $ \sqrt{\kappa(A)} $& $ CG $ & $ PCG(0) $& $PCG(10^{-2})$& $PCG(10^{-3})$ \\ \hline
+					$ 102 $ & $ 1.0000 \times 10^{-4} $ & $ 6.0107 \times 10^3 $ & $ 77.5288 $ 		& $ 283 $ 	& $ 87 $ 	& $ 45 $ 		& $ 17 $ 		\\ \hline
+					$ 202 $ & $ 2.5000 \times 10^{-5} $ & $ 2.3810 \times 10^4 $ & $ 154.3039 $ 	& $ 532 $ 	& $ 159 $ 	& $ 78 $ 		& $ 30 $ 		\\ \hline
+					$ 402 $ & $ 6.2500 \times 10^{-6} $ & $ 9.4770 \times 10^4 $ & $ 307.8473 $ 	& $ 948 $ 	& $ 282 $ 	& $ 137 $ 		& $ 53 $		\\ \hline
+					$ 802 $ & $ 1.5625 \times 10^{-6} $ & $ 3.7814 \times 10^5 $ & $ 614.9304 $ 	& $ 1792 $	& $ 533 $ 	& $ 258 $ 		& $ 97 $ 		\\ 
+				\end{tabular}
+				\caption{Iterations of PCG methods for each value of $n_x$ and respective values of $h$ and $\kappa(A)$}
+				\label{table:ex2}
+			\end{table}	
+		
+			One can note from the table the dependence of the number of iterations on $ h = \frac{1}{N} = \frac{1}{(nx-2)^2} $.
+			The number of iterations is halved when $n_x$ approximately doubles.		
+			
+				
+		\section*{Question 3}
+			show theoretically ??
+			
+			When using the Choledsky precontionier with no fill in, I did'nt get the expected results.
+			Both Matlab's and my implementation converged in only one iteration.
+			
+			\begin{figure}[H]
+				\centering
+				\includegraphics[width=.6\linewidth]{ex3.jpg}
+				\caption{Residual norm vs iteration number for PCG methods with $IC(0)$ preconditioner}
+				\label{fig:ex3}
+			\end{figure}
+		
+			
+			Due to the bad results, I tried to remove preconditioning form my implementation by setting $L$ as the identity matrix, \texttt{L = speye(size(L))}.
+			\begin{figure}[H]
+					\centering
+					\includegraphics[width=.6\linewidth]{ex3_NoPrec.jpg}
+					\caption{Residual norm vs iteration number for PCG methods without preconditioning}
+					\label{fig:ex3_NoPrec}
+			\end{figure}
+		
+			\begin{table}[H]
+				\centering
+				\begin{tabular}{c|c|c|c}
+					\textbf{Method} &  \textbf{Iterations} 	& \textbf{Final Residual} 		& \textbf{Computational Time} 	\\ \hline
+					Matlab PCG		& 			$6$ 		& $ 9.2128 \times 10^{-14} $ 	& $ 0.021 s $	\\ \hline	
+					My PCG 			& 			$5$			& $ 1.2744 \times 10^{-13} $	& $	0.012 s $	\\ \hline
+				\end{tabular}
+				\caption{Results for each value of implementation, no preconditioning}
+				\label{table:ex3_NoPrec}
+			\end{table}
+			These results show the theoretical calculations, my implementation is still better than expected.
+			
 		
 		
 		
 		\section*{Question 4}		
-		\begin{figure}[H]
-			\centering
-			\includegraphics[width=.6\linewidth]{ex4.jpg}
-			\caption{semilogy plot ex4}
-			\label{fig:ex4}
-		\end{figure}
+			\begin{figure}[H]
+				\centering
+				\includegraphics[width=.6\linewidth]{ex4.jpg}
+				\caption{Residual norm vs iteration number for PCG methods without preconditioning}
+				\label{fig:ex4}
+			\end{figure}
 		
+			\begin{table}[H]
+			\centering
+			\begin{tabular}{c|c|c|c}
+				\textbf{Preconditioner} &  \textbf{Iterations} 	& \textbf{Final Residual} 		& \textbf{Computational Time} 	\\ \hline
+				None					& 			$253$ 		& $ 1.1367 \times 10^{-4} $ 	& $ 0.254 s $	\\ \hline
+				Jacobi					& 			$36$ 		& $ 9.3198 \times 10^{-5} $ 	& $ 0.053 s $	\\ \hline		
+				IC(0)					& 			$10$		& $ 1.1155 \times 10^{-4} $		& $	0.046 s $	\\
+			\end{tabular}
+			\caption{Results for each preconditioner}
+			\label{table:ex4}
+			\end{table}
+		
+		There is a very clear improvement when using preconditioning.
+		It is also noticeable the superior characteristics of the incomplete Choledsky preconditioner relative to Jacobi.
 		
 		\section*{Question 5}
 		

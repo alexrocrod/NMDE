@@ -6,7 +6,7 @@ function [x, resvec, iter] = mypcg(A, b, tol, maxit, L)
         
     x = zeros(length(b),1);
     r = b - A * x;
-    z = M\r;
+    z = M \ r;
     p = z;
     rsold = r' * z;
     
@@ -16,7 +16,7 @@ function [x, resvec, iter] = mypcg(A, b, tol, maxit, L)
         x = x + alpha * p;
         r = r - alpha * Ap;
 
-        z = M2\(M1\r);
+        z = M2 \ (M1 \ r);
 
         rsnew = r' * z;
 
@@ -28,5 +28,5 @@ function [x, resvec, iter] = mypcg(A, b, tol, maxit, L)
         p = r + (rsnew / rsold) * p;
         rsold = rsnew; 
     end
-    resvec = resvec(1:iter+1,:);
+    resvec = resvec(1:iter+1);
 end
