@@ -34,7 +34,7 @@ tic
 [x3, resvec3, iter3] = mypcg(A, b, tol, maxit, L);
 toc
 
-semilogy(0:iter1, resvec1, 'r-*', 0:iter2, resvec2,'g-o', 0:iter3, resvec3,'b-+')
+semilogy(0:iter1, resvec1, 'r-*', 0:iter2, resvec2, 'g-o', 0:iter3, resvec3, 'b-+')
 legend('No preconditioner' , 'IC(0)', 'My implementation');
 xlabel('Iterations');
 ylabel('Residual Norm');

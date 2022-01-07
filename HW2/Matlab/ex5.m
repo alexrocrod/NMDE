@@ -8,9 +8,8 @@ close all
 clear all
 
 %% Question 5
-% 
-load("mat13041.rig");
-A = spconvert(mat13041);
+A = load("mat13041.rig");
+A = spconvert(A);
 n = size(A, 1);
 b1 = 1./sqrt(1:n);
 x_exact = b1';
@@ -22,16 +21,16 @@ x0 = ones(n,1);
 % Matlab GMRES without restart
 restart = n;
 tic
-[x1,flag1,relres,iter1,resvec1] = gmres(A,b,restart,tol,maxit);
+[~, ~, ~, iter1, resvec1] = gmres(A, b, restart, tol, maxit);
 toc
 totalit = (iter1(1)-1)*restart + iter1(2);
 
 % my GMRES
 tic
-[x2, iter2, resvec2, flag2] = mygmres(A,b,tol,maxit,x0);
+[~, iter2, resvec2, ~] = mygmres(A, b, tol, maxit, x0);
 toc
 
-semilogy(0:totalit, resvec1(1:totalit+1), 'r-*', 0:iter2, resvec2','g-+')
+semilogy(0:totalit, resvec1, 'r-*', 0:iter2, resvec2', 'g-+')
 legend('Matlab GMRES' , 'My GMRES');
 xlabel('Iterations');
 ylabel('Residual Norm');

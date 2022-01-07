@@ -8,14 +8,13 @@ close all
 clear all
 
 %% Question 6
-% 
-load("mat13041.rig");
-A = spconvert(mat13041);
+A = load("mat13041.rig");
+A = spconvert(A);
 n = size(A, 1);
 b1 = 1./sqrt(1:n);
 x_exact = b1';
 b = A * x_exact;
-tol = 1e-10; %1e-10;
+tol = 1e-10;
 maxit = 550;
 x0 = zeros(n,1);
 restart = n;
@@ -23,20 +22,21 @@ restart = n;
 setup.type = 'crout';
 setup.droptol = 0.01;
 tic
-% [L,U] = ilu(A);
 [L,U] = ilu(A,setup);
 toc
 
 tic
-[x1, flag1, relres, iter1, resvec1] = gmres(A, b, restart, tol, maxit,L,U);
+[x1, ~, ~, iter1, resvec1] = gmres(A, b, restart, tol, maxit,L,U);
 toc
 totalit = (iter1(1)-1)*restart + iter1(2);
-norm(b-A*x1)
+trueres1 = norm(b-A*x1);
+fprintf('Matlab GMRES -> Final Residue: %d, True Residue: %d\n', resvec1(end), trueres1)
 
 tic
-[x2, iter2, resvec2, flag2] = myprecgmres(A, b, tol, maxit, x0, L, U);
+[x2, iter2, resvec2, ~] = myprecgmres(A, b, tol, maxit, x0, L, U);
 toc
-norm(b-A*x2)
+trueres2 = norm(b-A*x2);
+fprintf('My GMRES -> Final Residue: %d, True Residue: %d\n ', resvec2(end), trueres2)
 
 semilogy(0:totalit, resvec1, 'r-*',0:iter2, resvec2, 'g-+')
 legend('Matlab GMRES' , 'My Prec. GMRES');
