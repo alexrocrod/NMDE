@@ -15,7 +15,7 @@ b = A * x_exact;
 tol = 1e-8;
 maxit = 500;
 
-% non preconditioned
+% Without Preconditioning
 tic
 [~,~,~, iter1, resvec1] = pcg(A, b, tol, maxit); 
 toc
@@ -32,6 +32,7 @@ tic
 [~,~,~, iter3, resvec3] = pcg(A, b, tol, maxit, L, L'); 
 toc
 
+% Residual Norm Plot
 semilogy(0:iter1, resvec1, 'r-*', 0:iter2, resvec2, 'g-o', 0:iter3, resvec3, 'b-+')
 legend('No preconditioner', 'Jacobi', 'IC(0)');
 xlabel('Iterations');

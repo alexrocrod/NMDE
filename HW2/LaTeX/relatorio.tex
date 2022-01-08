@@ -189,7 +189,7 @@
 					Matlab GMRES	& 			$38$ 		& $ 1.5592 \times 10^{-10} $ & $ 4.5350 \times 10^{-13} $	& $ 0.121 s $	\\ \hline
 					My GMRES		& 			$39$ 		& $ 2.3797 \times 10^{-13} $ & $ 7.1893 \times 10^{-14} $	& $ 4.943 s $	\\ 
 				\end{tabular}
-				\caption{Results for preconditioned each GMRES implementation}
+				\caption{Results for each preconditioned GMRES implementation}
 				\label{table:ex6}
 			\end{table}
 			
@@ -220,14 +220,14 @@
 				GMRES			& 			$6$ 		& $ 3.0413 \times 10^{-14} $ 	& $ 0.102 s $	\\ \hline	
 				My PCG 			& 			$5$			& $ 1.0468 \times 10^{-13} $	& $ 0.012 s $	\\ \hline
 			\end{tabular}
-			\caption{Residual norm vs iteration number for GMRES methods without preconditioning}
+			\caption{Results for each value of implementation, no preconditioning}
 			\label{table:ex6_c_NoPrec}
 		\end{table}
 	
 		\begin{figure}[H]
 			\centering
 			\includegraphics[width=.6\linewidth]{ex6b.jpg}
-			\caption{Results for each value of implementation, no preconditioning}
+			\caption{Residual norm vs iteration number for GMRES methods without preconditioning}
 			\label{fig:ex6_c_NoPrec}
 		\end{figure}
 	
@@ -237,54 +237,54 @@
 		
 		\section*{Question 7}
 		
-		\begin{table}[H]
-			\centering
-			\begin{tabular}{c|c|c|c}
-				\textbf{Restart} &  \textbf{Iterations} 	& \textbf{Final Residual} 		& \textbf{Computational Time} 	\\ \hline
-				10			& 			$1149$ 		& $ 9.6915 \times 10^{-13} $ 	& $ 2.235 s $	\\ \hline	
-				20			& 			$739$		& $ 9.6140 \times 10^{-13} $	& $ 1.443 s $	\\ \hline
-				30			& 			$88$ 		& $ 6.7203 \times 10^{-13} $ 	& $ 0.242 s $	\\ \hline	
-				50			& 			$41$		& $ 4.8414 \times 10^{-13} $	& $ 0.135 s $	\\ \hline
-			\end{tabular}
-			\caption{Iterations for each value of nx, no preconditioning}
-			\label{table:ex7}
-		\end{table}
-		
-		\begin{figure}[H]
-			\centering
-			\includegraphics[width=.6\linewidth]{ex7.jpg}
-			\caption{semilogy plot ex7}
-			\label{fig:ex7}
-		\end{figure}
-	
+			\begin{table}[H]
+				\centering
+				\begin{tabular}{c|c|c|c}
+					\texttt{\textbf{restart}} &  \textbf{Iterations} 	& \textbf{Final Residual} 		& \textbf{Computational Time} 	\\ \hline
+					$ 10 $			& 			$1149$ 		& $ 1.9901 \times 10^{-12} $ 	& $ 1.735 s $	\\ \hline	
+					$ 20 $			& 			$739$		& $ 1.9741 \times 10^{-12} $	& $ 1.443 s $	\\ \hline
+					$ 30 $			& 			$88$ 		& $ 1.3800 \times 10^{-12} $ 	& $ 0.242 s $	\\ \hline	
+					$ 50 $			& 			$41$		& $ 9.9416 \times 10^{-13} $	& $ 0.135 s $	\\ \hline
+				\end{tabular}
+				\caption{Results for each value of \texttt{restart}}
+				\label{table:ex7}
+			\end{table}
+			
+			\begin{figure}[H]
+				\centering
+				\includegraphics[width=.6\linewidth]{ex7.jpg}
+				\caption{Residual norm vs iteration number for each value of \texttt{restart}}
+				\label{fig:ex7}
+			\end{figure}
+			
+			One can notice a clear improvement in convergence with the increase of the \texttt{restart} value.
+			$\ldots$
 		
 		\section*{Question 8}
 		
-		\begin{table}[H]
-			\centering
-			\begin{tabular}{c|c|c|c|c|c|c}
-				\textbf{Tolerance} & \textbf{Iterations} & \textbf{Tprec}  & \textbf{Tsol}  & \textbf{Ttotal} & \textbf{Final Residual} & \textbf{rho} \\ \hline
-				$2 \times 10^{-2}$ & $1983$	& $ 39.59 s $ 	& $ 77.65 s $ & $ 117.24 s $ 	& $ 9.9053 \times 10^{-13} $ & $ 0.4537 $\\ \hline
-				$1 \times 10^{-2}$ & $691$	& $ 36.46 s $ 	& $ 26.63 s $ & $ 63.09 s $ 	& $ 9.7254 \times 10^{-13} $ & $ 0.5807 $\\ \hline
-				$3 \times 10^{-3}$ & $247$	& $ 40.67 s $ 	& $ 11.04 s $ & $ 51.71 s $ 	& $ 9.1709 \times 10^{-13} $ & $ 0.9401 $\\ \hline
-				$1 \times 10^{-3}$ & $102$	& $ 37.61 s $ 	& $ 5.63 s $ & $ 43.24 s $ 		& $ 8.7501 \times 10^{-13} $ & $ 1.4544 $\\ \hline
-				$1 \times 10^{-4}$ & $34$	& $ 42.44 s $ 	& $ 2.93 s $ & $ 45.37 s $ 		& $ 4.5169 \times 10^{-13} $ & $ 3.5140 $\\ \hline
-				$1 \times 10^{-5}$ & $16$	& $ 76.50 s $ 	& $ 2.49 s $ & $ 78.99 s $ 		& $ 4.9947 \times 10^{-13} $ & $ 9.0720 $\\ \hline
-			\end{tabular}
-			\caption{Iterations for each value of nx, no preconditioning}
-			\label{table:ex8}
-		\end{table}
-	
-		
-		
-		\begin{figure}[H]
-			\centering
-			\includegraphics[width=.6\linewidth]{ex8.jpg}
-			\caption{semilogy plot ex8}
-			\label{fig:ex8}
-		\end{figure}
-	
-	
+			Using \texttt{maxit=550}, \texttt{tol=1e-8}$\ldots$
+			
+			\begin{table}[H]
+				\centering
+				\begin{tabular}{c|c|c|c|c|c|c}
+					\textbf{Tolerance} & \textbf{Iterations} & \textbf{Prec. Time}  & \textbf{Tsol}  & \textbf{Ttotal} & \textbf{Final Residual} & \textbf{$ \rho $} \\ \hline
+					$2 \times 10^{-2}$ & $1316$	& $ 37.92 s $ 	& $ 44.53 s $ & $ 82.45 s $ 	& $ 5.2065 \times 10^{-7} $ & $ 0.4537 $\\ \hline
+					$1 \times 10^{-2}$ & $4444$	& $ 40.55 s $ 	& $ 22.86 s $ & $ 63.42 s $ 	& $ 5.7213 \times 10^{-7} $ & $ 0.5807 $\\ \hline
+					$3 \times 10^{-3}$ & $150$	& $ 51.78 s $ 	& $ 7.39 s $ & $ 59.17 s $ 		& $ 6.4998 \times 10^{-7} $ & $ 0.9401 $\\ \hline
+					$1 \times 10^{-3}$ & $67$	& $ 47.74 s $ 	& $ 3.63 s $ & $ 51.37 s $ 		& $ 8.5337 \times 10^{-7} $ & $ 1.4544 $\\ \hline
+					$1 \times 10^{-4}$ & $26$	& $ 43.30 s $ 	& $ 2.30 s $ & $ 45.60 s $ 		& $ 9.1517 \times 10^{-7} $ & $ 3.5140 $\\ \hline
+					$1 \times 10^{-5}$ & $12$	& $ 96.73 s $ 	& $ 2.69 s $ & $ 99.42 s $ 		& $ 9.4359 \times 10^{-7} $ & $ 9.0720 $\\ \hline
+				\end{tabular}
+				\caption{Results for each value of tolerance}
+				\label{table:ex8}
+			\end{table}
+			
+			\begin{figure}[H]
+				\centering
+				\includegraphics[width=.6\linewidth]{ex8.jpg}
+				\caption{Residual norm vs iteration number for each value of tolerance}
+				\label{fig:ex8}
+			\end{figure}
 	
 \end{document}
 

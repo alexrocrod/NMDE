@@ -32,6 +32,7 @@ tic
 [~, resvec2, iter2] = mypcg(A, b, tol, maxit, L);
 toc
 
+% Residual Norm Plot
 semilogy(0:iter1, resvec1, 'g-o', 0:iter2, resvec2, 'r-*')
 legend('Matlab PCG IC(0)', 'My PCG IC(0)');
 xlabel('Iterations');
@@ -49,6 +50,7 @@ tic
 [~, resvec4, iter4] = mypcg(A, b, tol, maxit, L);
 toc
 
+% Residual Norm Plot
 figure(2)
 semilogy(0:iter3, resvec3, 'g-o', 0:iter4, resvec4, 'r-*')
 legend('Matlab CG', 'My PCG with L=Identity');

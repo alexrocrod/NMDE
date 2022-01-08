@@ -18,18 +18,19 @@ tol = 1e-10;
 maxit = 550;
 x0 = ones(n,1);
 
-% Matlab GMRES without restart
+% Matlab GMRES Without Restart
 restart = n;
 tic
 [~, ~, ~, iter1, resvec1] = gmres(A, b, restart, tol, maxit);
 toc
 totalit = (iter1(1)-1)*restart + iter1(2);
 
-% my GMRES
+% My GMRES Implementation
 tic
 [~, iter2, resvec2, ~] = mygmres(A, b, tol, maxit, x0);
 toc
 
+% Residual Norm Plot
 semilogy(0:totalit, resvec1, 'r-*', 0:iter2, resvec2', 'g-+')
 legend('Matlab GMRES' , 'My GMRES');
 xlabel('Iterations');

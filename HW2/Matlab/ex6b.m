@@ -8,7 +8,6 @@ close all
 clear all
 
 %% Question 6c) - Solving 3b)
-
 n = 1e4;
 v = ones(n,1);
 vi = 1:5;
@@ -18,23 +17,60 @@ A = sparse(diag(v));
 L = ichol(A);
 n = size(A, 1);
 b = rand(n, 1);
+
 tol = 1e-8;
 maxit = 200;
-restart = maxit*10;
+restart = n;
 
+%% Original Exercise (only 1 iteration in both methods)
+
+% Matlab GMRES Without Restart
 tic
-% [x, flag, relres, iter1, resvec1] = gmres( A, b, restart, tol, maxit,L,L');
-[x, flag, relres, iter1, resvec1] = gmres( A, b, restart, tol, maxit)
+[~,~,~, iter1, resvec1] = gmres( A, b, restart, tol, maxit, L, L');
 toc
-totalit = (iter1(1)-1)*restart + iter1(2);
+totalit1 = (iter1(1)-1)*restart + iter1(2);
 
-L = speye(size(L));
+% My PCG Implementation
 tic
-[x, resvec, iter] = mypcg(A, b, tol, maxit, L);
+[~, resvec2, iter2] = mypcg(A, b, tol, maxit, L);
 toc
 
-semilogy(0:totalit, resvec1, 'r-*',0:iter, resvec, 'g-+')
-legend('Matlab GMRES' , 'My PCG');
+% Matlab PCG
+tic
+[~,~,~,  iter3, resvec3] = pcg(A, b, tol, maxit, L, L');
+toc
+
+% Residual Norm Plot
+semilogy(0:totalit1, resvec1, 'g-o', 0:iter2, resvec2, 'r-*', 0:iter3, resvec3, 'b-+')
+legend('Matlab GMRES IC(0)', 'My PCG IC(0)', 'Matlab PCG IC(0)');
 xlabel('Iterations');
 ylabel('Residual Norm');
+
+
+%% Without Preconditioning (larger number of iterations)
+
+% Matlab GMRES Without Restart
+tic
+[~,~,~, iter4, resvec4] = gmres(A, b, restart, tol, maxit);
+toc
+totalit4 = (iter4(1)-1)*restart + iter4(2);
+
+% My PCG Implementation
+L = speye(size(L));
+tic
+[~, resvec5, iter5] = mypcg(A, b, tol, maxit, L);
+toc
+
+% Matlab PCG
+tic
+[~,~,~,  iter6, resvec6] = pcg(A, b, tol, maxit);
+toc
+
+% Residual Norm Plot
+figure(2)
+semilogy(0:totalit4, resvec4, 'g-o', 0:iter5, resvec5, 'r-*', 0:iter6, resvec6, 'b-+')
+legend('Matlab GMRES w/o Prec.', 'My PCG with L=Identity', 'Matlab CG');
+xlabel('Iterations');
+ylabel('Residual Norm');
+
 

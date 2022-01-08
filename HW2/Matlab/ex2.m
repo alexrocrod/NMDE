@@ -8,11 +8,11 @@ close all
 clear all
 
 %% Question 2
-% 
 nxs = [102 202 402 802];
 lnx = length(nxs);
 ifig = 1;
-iters = zeros(lnx,lnx);
+iters = zeros(lnx,4);
+hs = zeros(lnx,1);
 
 for nx=nxs
     fprintf('nx = %d\n',nx);
@@ -23,13 +23,15 @@ for nx=nxs
     b = A * x_exact;
     tol = 1e-8;
     maxit = 5000;
+    hs(ifig) = 1 / n;
 
-    cond = condest(A) % condition number estimation
+    cond = condest(A); % condition number estimation
     
     % a) No Preconditioner
     tic
     [~, ~, ~, iter1, resvec1] = pcg(A, b, tol, maxit); 
     NoPrec = toc % computational time
+    iters(ifig, 1) = iter1;
 
 
     % b) PCG with IC(0)
@@ -37,6 +39,7 @@ for nx=nxs
     tic
     [~, ~, ~, iter2, resvec2] = pcg(A, b, tol, maxit, L, L');
     IC0 = toc % computational time
+    iters(ifig, 2) = iter2;
     
 
     % c) PCG with IC and droptol = 1e-2
@@ -46,7 +49,7 @@ for nx=nxs
     tic
     [~, ~, ~,  iter3, resvec3] = pcg(A, b, tol, maxit, L, L'); 
     IC2 = toc % computational time
-
+    iters(ifig, 3) = iter3;
 
     % d) PCG with IC and droptol = 1e-3
     opts.type = 'ict';
@@ -55,6 +58,7 @@ for nx=nxs
     tic
     [~, ~, ~,  iter4, resvec4] = pcg(A, b, tol, maxit, L, L');
     IC3 = toc % computational time
+    iters(ifig, 4) = iter4;
 
     % Residual Norm Plots
     figure(ifig);
@@ -63,8 +67,14 @@ for nx=nxs
     legend('No preconditioner', 'IC(0)', 'droptol=1e-2', 'droptol=1e-3');
     xlabel('Iterations');
     ylabel('Residual Norm');
+
     ifig = ifig + 1;
     if ifig <= lnx, pause(1), end
 end
+
+% Results table
+format shortEng
+tab = [nxs' hs iters]
+format default
 
 

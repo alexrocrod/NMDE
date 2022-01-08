@@ -1,6 +1,8 @@
+% Extra helper script to compute general data about a sparse matrix 
+% representing the finite difference Laplacian
 
-% close all
-% clear all
+close all
+clear all
 
 nxs = [102,202,402,802];
 n = length(nxs);

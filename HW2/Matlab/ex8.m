@@ -7,16 +7,15 @@
 close all
 clear all
 
-%% Question 8
-% 
-A1 = load("ML_laplace.mtx");
-A = spconvert(A1);
-n = size(A, 1);
-x_exact = ones(n,1);
+%% Question 8 
+A = load("ML_laplace.mtx");
+A = spconvert(A);
+nA = size(A, 1);
+x_exact = ones(nA,1);
 b = A * x_exact;
-tol = 1e-12;
+tol = 1e-8;
 maxit = 550;
-x0 = zeros(n,1);
+x0 = zeros(nA,1);
 
 restart = 50;
 
@@ -30,41 +29,44 @@ rho = zeros(n,1);
 resvecs = zeros(n,maxit*restart);
 
 idx = 1;
-for dtol = tols
-    disp(dtol);
-
+for dtol = tols    
+    % Preconditioner Computation
     tic
-%     setup.type = 'crout';
-    setup.type = 'ilutp';
+    setup.type = 'crout';
     setup.droptol = dtol;
     [L,U] = ilu(A,setup);
     tprec(idx) = toc;
     
+    % run method
     tic
     [x1,flag1,relres,iter,resvec] = gmres(A,b,restart,tol,maxit,L,U);
     tsol(idx) = toc;
 
+    % sabe results
     totalit = (iter(1)-1)*restart + iter(2);
     totalits(idx) = totalit;
-    residuef(idx) = relres;
+    residuef(idx) = resvec(end);
     rho(idx) = (nnz(L) + nnz(U) - n)/nnz(A);
     resvecs(idx,1:totalit+1) = resvec(1:totalit+1)';
+
+    % display results
+    fprintf(['Droptol.: %d -> Iterations: %d, : Time Prec.: %d, Time Sol.: %d, ' ...
+        'Residue: %d , Rho: %d \n'], dtol, totalit, tprec(idx), ...
+        tsol(idx), residuef(idx), rho(idx))
 
     idx = idx + 1;
 end
 
-%% plot
-
-figure(2)
+% Residual Norm Plot
+linestyles = {'r-*', 'g-o', 'b-+', 'k-h', 'c-s', 'y-d'};
 for i=1:n
-    semilogy(0:totalits(i), resvecs(i,1:totalits(i)+1))
+    semilogy(0:totalits(i), resvecs(i,1:totalits(i)+1), linestyles{i})
     hold on
 end
-axis([0 max(totalits) min(min(resvecs~=0)) max(max(resvecs))])
+axis([0 1.1*max(totalits) 0 max(max(resvecs))])
 legend('tol=2e-2','tol=1e-2','tol=3e-3','tol=1e-3','tol=1e-4','tol=1e-5')
 
-%% table
-
+% Results Table
 ttotal = tprec + tsol;
 format shortEng
 tab = [tols' totalits tprec tsol ttotal residuef rho]

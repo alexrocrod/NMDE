@@ -17,14 +17,17 @@ b = A * x_exact;
 tol = 1e-10;
 maxit = 550;
 x0 = zeros(n,1);
-restart = n;
 
+
+% Preconditioner
 setup.type = 'crout';
 setup.droptol = 0.01;
 tic
 [L,U] = ilu(A,setup);
 toc
 
+% Matlab GMRES Without Restart
+restart = n;
 tic
 [x1, ~, ~, iter1, resvec1] = gmres(A, b, restart, tol, maxit,L,U);
 toc
@@ -32,14 +35,16 @@ totalit = (iter1(1)-1)*restart + iter1(2);
 trueres1 = norm(b-A*x1);
 fprintf('Matlab GMRES -> Final Residue: %d, True Residue: %d\n', resvec1(end), trueres1)
 
+% My GMRES Implementation
 tic
 [x2, iter2, resvec2, ~] = myprecgmres(A, b, tol, maxit, x0, L, U);
 toc
 trueres2 = norm(b-A*x2);
 fprintf('My GMRES -> Final Residue: %d, True Residue: %d\n ', resvec2(end), trueres2)
 
-semilogy(0:totalit, resvec1, 'r-*',0:iter2, resvec2, 'g-+')
-legend('Matlab GMRES' , 'My Prec. GMRES');
+% Residual Norm Plot
+semilogy(0:totalit, resvec1, 'r-*', 0:iter2, resvec2, 'g-+')
+legend('Matlab GMRES', 'My Prec. GMRES');
 xlabel('Iterations');
 ylabel('Residual Norm');
 
