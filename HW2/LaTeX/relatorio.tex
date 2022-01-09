@@ -74,7 +74,7 @@
 				\kappa(A) = \frac{\lambda_{max}(A)}{\lambda_{min}(A)}.
 			\end{equation}
 		
-			In Matlab, I used the \texttt{condest(A)} function to estimate the condition number of a sparse matrix A.
+			In Matlab, I used the \texttt{condest(A)} function to estimate the condition number of a sparse matrix \texttt{A}.
 			
 			The following table shows every data point needed to understand what the number of iterations of the CG method depends on.
 		
@@ -108,16 +108,16 @@
 				k &\approx 300.44.		
 			\end{align}
 		
-			This result is for a not preconditioned method.
+			This result is for a non-preconditioned method.
 			
 			For PCG we can find the optimal polynomial
 			\begin{equation}
-				P_k(t) = (1-\frac{t}{200})(1-\frac{t}{400})(1-\frac{t}{600})(1-\frac{t}{800})(1-\frac{t}{1000})\hat{T}_{k-4}(t)
+				P_k(t) = \left(1-\frac{t}{200}\right)\left(1-\frac{t}{400}\right)\left(1-\frac{t}{600}\right)\left(1-\frac{t}{800}\right)\left(1-\frac{t}{1000}\right)\hat{T}_{k-4}(t)
 			\end{equation}
 		
 			This is only relevant for $t \in \lambda(A) = \{1,200,400,600,800,1000\}$.
-			The error reduction is then given by the maximum value of $ T_{k-4}(t), k=4,5,\ldots $.
-			So the method converges when $\frac{1}{max(T_{k-4}(t))||b||} < tol$, with $tol = 10^{-8}$ in this case.
+			The error reduction is then given by the maximum value of $ \hat{T}_{k-4}(t),\ k=4,5,\ldots $.
+			So the method converges when $\frac{1}{max(\hat{T}_{k-4}(t))||b||} < tol$, with $tol = 10^{-8}$ in this case.
 			
 			These calculations produced the following results:
 			\begin{table}[H]
@@ -344,10 +344,10 @@
 				\label{fig:ex8}
 			\end{figure}
 		
-			There is a clear reduction in the number of iterations with the decrease of  which is due to the more complete factorization.
+			There is a clear reduction in the number of iterations with the decrease of \texttt{droptol} which is due to the more complete factorization.
 			This has a higher computational cost to compute (larger Prec. Time) but a smaller solving time.
-			Despite of this, the smaller \texttt{droptol} produces a reduction in total computational time until $1e-5$.
-			For \texttt{droptol}$  = 1e-5 $ the Prec. time increases significantly and the solving time stagnates relative to $ 1e-4 $.  
+			Despite of this, the smaller \texttt{droptol} produces a reduction in total computational time until \texttt{droptol}$ = 1\times 10^{-5}$.
+			For \texttt{droptol}$  = 1\times 10^{-5} $ the Prec. time increases significantly and the solving time stagnates relative to $ 1\times 10^{-4} $.  
 			The final residual does not have a noticeable change with the reduction of \texttt{droptol}.
 			The density ($ \rho $) has a very clear increase with the reduction of \texttt{droptol}.			
 	
