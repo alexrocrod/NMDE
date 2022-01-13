@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.23 (MiKTeX 21.10) (preloaded format=pdflatex 2021.11.8)  13 JAN 2022 19:17
+This is pdfTeX, Version 3.141592653-2.6-1.40.23 (MiKTeX 21.10) (preloaded format=pdflatex 2021.11.8)  13 JAN 2022 20:09
 entering extended mode
 **./relatorio.tex
 (relatorio.tex
@@ -337,22 +337,24 @@ Package pdftex.def Info: ./images//img4/C.png  used on input line 112.
 es//img3/J.png (PNG copy)> <./images//img3/C.png (PNG copy)>] [3 <./images//img
 4/J.png (PNG copy)> <./images//img4/C.png (PNG copy)>] (relatorio.aux) ) 
 Here is how much of TeX's memory you used:
- 4484 strings out of 478907
- 71144 string characters out of 2851892
- 369949 words of memory out of 3000000
- 22321 multiletter control sequences out of 15000+600000
- 410834 words of font info for 55 fonts, out of 8000000 for 9000
+ 4490 strings out of 478907
+ 71226 string characters out of 2851892
+ 369957 words of memory out of 3000000
+ 22326 multiletter control sequences out of 15000+600000
+ 411142 words of font info for 56 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 57i,8n,66p,249b,468s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 57i,9n,66p,249b,468s stack positions out of 5000i,500n,10000p,200000b,80000s
 <C:/Use
-rs/xandr/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmbx12.pf
+rs/xandr/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmbx10.pf
 b><C:/Users/xandr/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/
-cmr10.pfb><C:/Users/xandr/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsf
-onts/cm/cmr12.pfb><C:/Users/xandr/AppData/Local/Programs/MiKTeX/fonts/type1/pub
-lic/amsfonts/cm/cmr17.pfb>
-Output written on relatorio.pdf (3 pages, 301827 bytes).
+cmbx12.pfb><C:/Users/xandr/AppData/Local/Programs/MiKTeX/fonts/type1/public/ams
+fonts/cm/cmmi10.pfb><C:/Users/xandr/AppData/Local/Programs/MiKTeX/fonts/type1/p
+ublic/amsfonts/cm/cmr10.pfb><C:/Users/xandr/AppData/Local/Programs/MiKTeX/fonts
+/type1/public/amsfonts/cm/cmr12.pfb><C:/Users/xandr/AppData/Local/Programs/MiKT
+eX/fonts/type1/public/amsfonts/cm/cmr17.pfb>
+Output written on relatorio.pdf (3 pages, 325408 bytes).
 PDF statistics:
- 42 PDF objects out of 1000 (max. 8388607)
+ 52 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
  51 words of extra memory for PDF output out of 10000 (max. 10000000)
 

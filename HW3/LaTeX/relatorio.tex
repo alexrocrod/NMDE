@@ -21,7 +21,16 @@
 	\date{\today}
 	
 	\maketitle
-		\section{intro}
+		\section{Method}
+			I will describe relevant steps of developing this implementation and respective theory.
+			
+			1- input files from specified mesh
+			
+			2- create pattern for the stifness matrix
+			...
+			
+			3- local stifness matrix
+			
 		
 		
 		\section{Results}
@@ -118,7 +127,28 @@
 				\end{figure}
 			
 			\subsection{Epsilon}
-	
+				\begin{table}[H]
+					\centering
+%					\begin{tabular}{c|c|c}
+%						\textbf{Level} 	& \textbf{$ \epsilon $} & \textbf{ Error Ratio}  \\ \hline
+%						$ 0  $			& $ 0.9931 $ & N/A \\ \hline
+%						$ 1  $			& $ 1.0231 $ & $ 1.0302 $ \\ \hline
+%						$ 2  $			& $ 1.0217 $ & $ 0.9986 $ \\ \hline
+%						$ 3  $			& $ 1.0190 $ & $ 0.9974 $ \\ \hline
+%						$ 4  $			& $ 1.0176 $ & $ 0.9986 $ \\ 
+%					\end{tabular}
+					\begin{tabular}{c|c|c}
+						\textbf{Level} 	& \textbf{$ \epsilon $} & \textbf{ Error Ratio}  \\ \hline
+						$ 0  $			& $ 0.9931 $ 			& N/A \\ \hline
+						$ 1  $			& $ 1.0508 $ 			& $ 1.0581 $ \\ \hline
+						$ 2  $			& $ 1.0629 $ 			& $ 1.0115 $ \\ \hline
+						$ 3  $			& $ 1.0657 $	 		& $ 1.0026 $ \\ \hline
+						$ 4  $			& $ 1.0664 $ 			& $ 1.0007 $ \\ 
+					\end{tabular}
+					\caption{FEM Convergence table}
+					\label{table:errors}
+				\end{table}
+				The $ \epsilon $ value slightly increases on each step of refinement....??
 	
 	
 \end{document}
