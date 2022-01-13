@@ -8,9 +8,9 @@ close all
 clear all
 
 %% Input
-prec = 'C'; % J -> use Jacobi, C -> use Choledsky
+prec = 'J'; % J -> use Jacobi, C -> use Choledsky
 % mesh
-mesh = '4';
+mesh = '0';
 file = ['Input files\mesh' mesh '\mesh' mesh]; % 
 coord = load([file '.coord']);
 topol = load([file '.topol']);
@@ -81,18 +81,22 @@ end
 
 %% Boundary Conditions Enforcement
 
-% for i = bound(:,1)
-%     H(i,i) = Rmax;
-%     f(i) = Rmax*f(i);
-% end
+% mean(mean(H)) order of magnitude of 1
+
+for i = bound(:,1)
+%     H(i,:) = 0; destroys simetry
+    H(i,i) = Rmax*H(i,i); % works
+%     H(i,i) = Rmax; % substitute -> gives ichol(H) error
+%     f(i) = Rmax*f(i); % not needed in our case
+end
 
 %% Linear System Solution
 tol = 1e-8;
 maxit = 1000;
 
 
-savepic = ['Results\' prec  '_' mesh '\'];
-mkdir(savepic(1:end-1))
+savefolder = ['Results\' prec  '_' mesh '\'];
+mkdir(savefolder(1:end-1))
 
 
 if prec == 'J'
@@ -109,9 +113,14 @@ else
     Tsol = toc
 end
 
+% fprintf('Iter=%d, Nres=%d\n',iter+1,length(resvec))
+% semilogy(0:iter,resvec(1:iter+1),'r-*')
+
 semilogy(0:iter,resvec,'r-*')
+xlabel('Iterations');
+ylabel('Residual Norm');
 f = gcf;
-exportgraphics(f, [savepic 'Convergence.png'])
+exportgraphics(f, [savefolder 'Convergence.png'])
 
 
 %% Error Computation
@@ -132,7 +141,7 @@ for i=1:Nn
 end
 epsilon = sqrt(error)
 
-save([savepic 'res.txt'],'epsilon','Tsol','-ascii');
+save([savefolder 'res.txt'],'epsilon','Tsol','-ascii');
 
 
 
