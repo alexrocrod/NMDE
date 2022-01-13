@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.23 (MiKTeX 21.10) (preloaded format=pdflatex 2021.11.8)  23 DEC 2021 17:32
+This is pdfTeX, Version 3.141592653-2.6-1.40.23 (MiKTeX 21.10) (preloaded format=pdflatex 2021.11.8)  13 JAN 2022 19:17
 entering extended mode
 **./relatorio.tex
 (relatorio.tex
@@ -175,28 +175,33 @@ Package: float 2001/11/08 v1.3d Float enhancements (AL)
 \@float@everytoks=\toks25
 \@floatcapt=\box54
 )
+(C:\Users\xandr\AppData\Local\Programs\MiKTeX\tex/latex/caption\subcaption.sty
+Package: subcaption 2020/10/07 v1.3j Sub-captions (AR)
+\c@subfigure=\count275
+\c@subtable=\count276
+)
 (C:\Users\xandr\AppData\Local\Programs\MiKTeX\tex/latex/l3backend\l3backend-pdf
 tex.def
 File: l3backend-pdftex.def 2021-10-18 L3 backend support: PDF output (pdfTeX)
-\l__color_backend_stack_int=\count275
+\l__color_backend_stack_int=\count277
 \l__pdf_internal_box=\box55
 ) (relatorio.aux)
 \openout1 = `relatorio.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 17.
-LaTeX Font Info:    ... okay on input line 17.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 17.
-LaTeX Font Info:    ... okay on input line 17.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 17.
-LaTeX Font Info:    ... okay on input line 17.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 17.
-LaTeX Font Info:    ... okay on input line 17.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 17.
-LaTeX Font Info:    ... okay on input line 17.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 17.
-LaTeX Font Info:    ... okay on input line 17.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 17.
-LaTeX Font Info:    ... okay on input line 17.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 18.
+LaTeX Font Info:    ... okay on input line 18.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 18.
+LaTeX Font Info:    ... okay on input line 18.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 18.
+LaTeX Font Info:    ... okay on input line 18.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 18.
+LaTeX Font Info:    ... okay on input line 18.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 18.
+LaTeX Font Info:    ... okay on input line 18.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 18.
+LaTeX Font Info:    ... okay on input line 18.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 18.
+LaTeX Font Info:    ... okay on input line 18.
 
 *geometry* driver: auto-detecting
 *geometry* detected driver: pdftex
@@ -236,16 +241,16 @@ LaTeX Font Info:    ... okay on input line 17.
 (C:\Users\xandr\AppData\Local\Programs\MiKTeX\tex/context/base/mkii\supp-pdf.mk
 ii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count276
+\scratchcounter=\count278
 \scratchdimen=\dimen167
 \scratchbox=\box56
-\nofMPsegments=\count277
-\nofMParguments=\count278
+\nofMPsegments=\count279
+\nofMParguments=\count280
 \everyMPshowfont=\toks26
-\MPscratchCnt=\count279
+\MPscratchCnt=\count281
 \MPscratchDim=\dimen168
-\MPnumerator=\count280
-\makeMPintoPDFobject=\count281
+\MPnumerator=\count282
+\makeMPintoPDFobject=\count283
 \everyMPtoPDFconversion=\toks27
 )
 (C:\Users\xandr\AppData\Local\Programs\MiKTeX\tex/latex/epstopdf-pkg\epstopdf-b
@@ -261,37 +266,93 @@ File: epstopdf-sys.cfg 2021/03/18 v2.0 Configuration of epstopdf for MiKTeX
 Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: float package is loaded.
 Package caption Info: End \AtBeginDocument code.
-LaTeX Font Info:    Trying to load font information for U+msa on input line 22.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 23.
 
  (C:\Users\xandr\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 22.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 23.
 
 
 (C:\Users\xandr\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
+<./images//img0/J.png, id=1, 370.986pt x 294.8616pt>
+File: ./images//img0/J.png Graphic file (type png)
+<use ./images//img0/J.png>
+Package pdftex.def Info: ./images//img0/J.png  used on input line 33.
+(pdftex.def)             Requested size: 220.8426pt x 175.52356pt.
+<./images//img0/C.png, id=2, 369.0588pt x 294.8616pt>
+File: ./images//img0/C.png Graphic file (type png)
+<use ./images//img0/C.png>
+Package pdftex.def Info: ./images//img0/C.png  used on input line 39.
+(pdftex.def)             Requested size: 220.8426pt x 176.44589pt.
+<./images//img1/J.png, id=3, 375.804pt x 294.8616pt>
+File: ./images//img1/J.png Graphic file (type png)
+<use ./images//img1/J.png>
+Package pdftex.def Info: ./images//img1/J.png  used on input line 52.
+(pdftex.def)             Requested size: 220.8426pt x 173.27844pt.
+<./images//img1/C.png, id=4, 373.8768pt x 294.8616pt>
+File: ./images//img1/C.png Graphic file (type png)
+<use ./images//img1/C.png>
+Package pdftex.def Info: ./images//img1/C.png  used on input line 58.
+(pdftex.def)             Requested size: 220.8426pt x 174.1693pt.
+<./images//img2/J.png, id=5, 375.804pt x 294.8616pt>
+File: ./images//img2/J.png Graphic file (type png)
+<use ./images//img2/J.png>
+Package pdftex.def Info: ./images//img2/J.png  used on input line 70.
+(pdftex.def)             Requested size: 220.8426pt x 173.27844pt.
+<./images//img2/C.png, id=6, 373.8768pt x 294.8616pt>
+File: ./images//img2/C.png Graphic file (type png)
+<use ./images//img2/C.png>
+Package pdftex.def Info: ./images//img2/C.png  used on input line 76.
+(pdftex.def)             Requested size: 220.8426pt x 174.1693pt.
+
 [1
 
-{C:/Users/xandr/AppData/Local/MiKTeX/pdftex/config/pdftex.map}]
-(relatorio.aux) ) 
+{C:/Users/xandr/AppData/Local/MiKTeX/pdftex/config/pdftex.map} <./images//img0/
+J.png (PNG copy)> <./images//img0/C.png (PNG copy)> <./images//img1/J.png (PNG 
+copy)> <./images//img1/C.png (PNG copy)>]
+<./images//img3/J.png, id=15, 375.804pt x 294.8616pt>
+File: ./images//img3/J.png Graphic file (type png)
+<use ./images//img3/J.png>
+Package pdftex.def Info: ./images//img3/J.png  used on input line 88.
+(pdftex.def)             Requested size: 220.8426pt x 173.27844pt.
+<./images//img3/C.png, id=16, 373.8768pt x 294.8616pt>
+File: ./images//img3/C.png Graphic file (type png)
+<use ./images//img3/C.png>
+Package pdftex.def Info: ./images//img3/C.png  used on input line 94.
+(pdftex.def)             Requested size: 220.8426pt x 174.1693pt.
+<./images//img4/J.png, id=17, 375.804pt x 294.8616pt>
+File: ./images//img4/J.png Graphic file (type png)
+<use ./images//img4/J.png>
+Package pdftex.def Info: ./images//img4/J.png  used on input line 106.
+(pdftex.def)             Requested size: 220.8426pt x 173.27844pt.
+<./images//img4/C.png, id=18, 373.8768pt x 294.8616pt>
+File: ./images//img4/C.png Graphic file (type png)
+<use ./images//img4/C.png>
+Package pdftex.def Info: ./images//img4/C.png  used on input line 112.
+(pdftex.def)             Requested size: 220.8426pt x 174.1693pt.
+ [2 <./images//img2/J.png (PNG copy)> <./images//img2/C.png (PNG copy)> <./imag
+es//img3/J.png (PNG copy)> <./images//img3/C.png (PNG copy)>] [3 <./images//img
+4/J.png (PNG copy)> <./images//img4/C.png (PNG copy)>] (relatorio.aux) ) 
 Here is how much of TeX's memory you used:
- 4298 strings out of 478907
- 67474 string characters out of 2851892
- 363317 words of memory out of 3000000
- 22145 multiletter control sequences out of 15000+600000
- 409279 words of font info for 49 fonts, out of 8000000 for 9000
+ 4484 strings out of 478907
+ 71144 string characters out of 2851892
+ 369949 words of memory out of 3000000
+ 22321 multiletter control sequences out of 15000+600000
+ 410834 words of font info for 55 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 57i,7n,66p,249b,243s stack positions out of 5000i,500n,10000p,200000b,80000s
-<C:/Users/xandr/AppData/Local/Programs/MiKTeX/fonts/type1/publ
-ic/amsfonts/cm/cmbx12.pfb><C:/Users/xandr/AppData/Local/Programs/MiKTeX/fonts/t
-ype1/public/amsfonts/cm/cmr10.pfb><C:/Users/xandr/AppData/Local/Programs/MiKTeX
-/fonts/type1/public/amsfonts/cm/cmr12.pfb><C:/Users/xandr/AppData/Local/Program
-s/MiKTeX/fonts/type1/public/amsfonts/cm/cmr17.pfb>
-Output written on relatorio.pdf (1 page, 48544 bytes).
+ 57i,8n,66p,249b,468s stack positions out of 5000i,500n,10000p,200000b,80000s
+<C:/Use
+rs/xandr/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmbx12.pf
+b><C:/Users/xandr/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/
+cmr10.pfb><C:/Users/xandr/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsf
+onts/cm/cmr12.pfb><C:/Users/xandr/AppData/Local/Programs/MiKTeX/fonts/type1/pub
+lic/amsfonts/cm/cmr17.pfb>
+Output written on relatorio.pdf (3 pages, 301827 bytes).
 PDF statistics:
- 26 PDF objects out of 1000 (max. 8388607)
+ 42 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
- 1 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 51 words of extra memory for PDF output out of 10000 (max. 10000000)
 

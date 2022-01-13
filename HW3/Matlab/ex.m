@@ -8,7 +8,7 @@ close all
 clear all
 
 %% Input
-prec = 'J'; % J -> use Jacobi, C -> use Choledsky
+prec = 'C'; % J -> use Jacobi, C -> use Choledsky
 % mesh
 mesh = '0';
 file = ['Input files\mesh' mesh '\mesh' mesh]; % 
