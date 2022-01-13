@@ -8,9 +8,9 @@ close all
 clear all
 
 %% Input
-
+prec = 'C'; % J -> use Jacobi, C -> use Choledsky
 % mesh
-mesh = '0';
+mesh = '4';
 file = ['Input files\mesh' mesh '\mesh' mesh]; % 
 coord = load([file '.coord']);
 topol = load([file '.topol']);
@@ -81,28 +81,37 @@ end
 
 %% Boundary Conditions Enforcement
 
-for i = bound(:,1)
-    H(i,i) = Rmax;
-    f(i) = Rmax*f(i);
-end
+% for i = bound(:,1)
+%     H(i,i) = Rmax;
+%     f(i) = Rmax*f(i);
+% end
 
 %% Linear System Solution
 tol = 1e-8;
 maxit = 1000;
 
-% Jacobi
-M = sparse(diag(diag(H)));
-tic
-[x1, flag1, relres1, iter1, resvec1] = pcg(H, f, tol, maxit, M);
-toc
 
-% Choledsky
-% L = ichol(H);
-% tic
-% [x2, flag2, relres, iter2, resvec2] = pcg(H, f, tol, maxit, L, L');
-% toc
+savepic = ['Results\' prec  '_' mesh '\'];
+mkdir(savepic(1:end-1))
 
-semilogy(0:iter1,relres1,'r-*')
+
+if prec == 'J'
+    % Jacobi
+    M = sparse(diag(diag(H)));
+    tic
+    [x, flag, relres, iter, resvec] = pcg(H, f, tol, maxit, M);
+    Tsol = toc
+else
+    % Choledsky
+    L = ichol(H);
+    tic
+    [x, flag, relres, iter, resvec] = pcg(H, f, tol, maxit, L, L');
+    Tsol = toc
+end
+
+semilogy(0:iter,resvec,'r-*')
+f = gcf;
+exportgraphics(f, [savepic 'Convergence.png'])
 
 
 %% Error Computation
@@ -112,7 +121,7 @@ for i=1:Nn
     xsq = coord(i,1)^2;
     ysq = coord(i,2)^2;
     u_exact = xsq + ysq - xsq*ysq -1;
-    u_exp = x1(i);
+    u_exp = x(i);
 
     tris = mod(find(topol==i),40);
     tris(tris==0) = 40; % fix changing 40, 80, 120 to 0
@@ -122,6 +131,9 @@ for i=1:Nn
     error = error + res;
 end
 epsilon = sqrt(error)
+
+save([savepic 'res.txt'],'epsilon','Tsol','-ascii');
+
 
 
 
