@@ -48,14 +48,14 @@ f = zeros(Nn,1);
 for i = 1:Nn
     x = coord(i,1);
     y = coord(i,2);
-    tris = mod(find(topol==i),Ne);
-    tris(tris==0) = Ne; % fix changing k*Ne to 0
-    f(i) = (-4 + 2*x*x + 2*y*y)*sum(delta(tris))/3;  
+
+    els = mod(find(topol==i),Ne); % elements that have that node
+    els(els==0) = Ne; % fix changing k*Ne to 0
+
+    f(i) = (-4 + 2*x^2 + 2*y^2) * sum(delta(els)) / 3;  
 end
 
 %% Boundary Conditions Enforcement
-
-% mean(mean(H)) order of magnitude of 1
 
 for i = bound(:,1)
 %     H(i,:) = 0; destroys simetry
@@ -65,30 +65,30 @@ for i = bound(:,1)
 end
 
 %% Linear System Solution
+% PCG Parameters
 tol = 1e-8;
 maxit = 1000;
 
-
-if prec == 'J'
-    % Jacobi
+if prec == 'J' % Jacobi
     M = sparse(diag(diag(H)));
     tic
     [x, flag, relres, iter, resvec] = pcg(H, f, tol, maxit, M);
     Tsol = toc
-else
-    % Choledsky
+elseif prec == 'C' % Choledsky
     L = ichol(H);
     tic
     [x, flag, relres, iter, resvec] = pcg(H, f, tol, maxit, L, L');
     Tsol = toc
+else
+    disp('Invalid value for the preconditioner id, valid values: J and C.')
 end
 
-% fprintf('Iter=%d, Nres=%d\n',iter+1,length(resvec))
-% semilogy(0:iter,resvec(1:iter+1),'r-*')
-
+% Convergence Plot
 semilogy(0:iter,resvec,'r-*')
 xlabel('Iterations');
 ylabel('Residual Norm');
+
+% Save figure
 f = gcf;
 exportgraphics(f, [savefolder 'Convergence.png'])
 
@@ -97,25 +97,29 @@ exportgraphics(f, [savefolder 'Convergence.png'])
 
 error = 0;
 for i=1:Nn
+    % Compute analytical solution
     xsq = coord(i,1)^2;
     ysq = coord(i,2)^2;
     u_exact = xsq + ysq - xsq*ysq - 1; % analytical solution
     
-    tris = mod(find(topol==i),Ne);
-    tris(tris==0) = Ne; % fix bad change of k*Ne to 0
-    surf = sum(delta(tris))/3; % surface measure
+    % Compute surface measure
+    els = mod(find(topol==i),Ne);
+    els(els==0) = Ne; % fix bad change of k*Ne to 0, k=1,2,...
+    surf = sum(delta(els))/3; % surface measure
 
     res = (x(i)- u_exact)^2 * surf;
     error = error + res;
 end
 epsilon = sqrt(error)
 
+% save epsilon and computational time in a .txt file
 save([savefolder 'res.txt'],'epsilon','Tsol','-ascii');
 
 
 %% Functions
 % Compute Stifness Matrix
 function [H, delta]= computeStiff(H, topol, coord)
+    
     Ne = length(topol);
     delta = ones(Ne,1);
     
@@ -123,24 +127,26 @@ function [H, delta]= computeStiff(H, topol, coord)
         x = coord(topol(k,:),1);
         y = coord(topol(k,:),2);
         
+        % Surface Meause of each element
         delta(k) = 0.5 * det([ones(3,1) coord(topol(k,:),:)]);
          
-        valid_ijm = [1 2 3 1 2];
+        valid_ijm = [1 2 3 1 2]; % simple rotation of indices
+        % compute b and c
         b = zeros(1,3);
         c = zeros(1,3);
         for i1=1:3
             j1 = valid_ijm(i1+1);
             m1 = valid_ijm(i1+2);
-    %         a(i1) = x(j1)*y(m1) - x(m1)*y(j1);
             b(i1) = y(j1) - y(m1);
             c(i1) = x(m1) - x(j1);
         end
-    
-        B = b' * b;
+        
+        % Hloc Computation
+        B = b' * b; % [bibi, bibj, ...]
         C = c' * c;
-        Hloc = 0.25/delta(k) * (B + C); 
+        Hloc = 1/(4*delta(k)) * (B + C); 
     
-        % Algorithm 3.3
+        % Algorithm 3.3 to assemble H
         for i = 1:3
             r1 = topol(k,i);
             for j = 1:3
