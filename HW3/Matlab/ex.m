@@ -9,7 +9,7 @@ clear all
 
 %% Input
 prec = 'J'; % J -> use Jacobi, C -> use Choledsky
-mesh = '0'; % mesh level of refinement
+mesh = '2'; % mesh level of refinement
 
 % Folder to save results
 savefolder = ['Results\' prec  '_' mesh '\'];
@@ -19,10 +19,7 @@ mkdir(savefolder(1:end-1))
 file = ['Input files\mesh' mesh '\mesh' mesh]; 
 coord = load([file '.coord']);
 topol = load([file '.topol']);
-
-% boundary conditions
-% u = 0 for boundary nodes
-bound = load([file '.bound']);
+bound = load([file '.bound']); % boundary conditions
 
 % parameters
 Ne = length(topol);
@@ -30,10 +27,10 @@ Nn = length(coord);
 Rmax = 1e15;
 
 %% Patter Creation for the Stifness Matrix
-row1 = 1:length(topol); % range 
+row1 = 1:Ne; % range 
 row2 = [row1' row1' row1']; % 3 ranges as colloums
-row = reshape(row2',1,[]); % row2 as a row vector
-col = reshape(topol',1,[]); % topol as a row vector
+row = reshape(row2',[],1); % row2 as a column vector
+col = reshape(topol',[],1); % topol as a column vector
 A = sparse(row,col,1); 
 H = A' * A;
 
@@ -67,7 +64,7 @@ end
 %% Linear System Solution
 % PCG Parameters
 tol = 1e-8;
-maxit = 1000;
+maxit = 100;
 
 if prec == 'J' % Jacobi
     M = sparse(diag(diag(H)));
@@ -98,9 +95,9 @@ exportgraphics(f, [savefolder 'Convergence.png'])
 error = 0;
 for i=1:Nn
     % Compute analytical solution
-    xsq = coord(i,1)^2;
-    ysq = coord(i,2)^2;
-    u_exact = xsq + ysq - xsq*ysq - 1; % analytical solution
+    xi = coord(i,1);
+    yi = coord(i,2);
+    u_exact = xi^2 + yi^2 - xi^2*yi^2 - 1; % analytical solution
     
     % Compute surface measure
     els = mod(find(topol==i),Ne);
