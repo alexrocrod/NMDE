@@ -26,16 +26,16 @@
 			Based on the homework text I implemented each step in Matlab.
 			
 			\begin{enumerate}
-				\item \textbf{Input files from specified mesh}:
+				\item \textbf{Input files from specified mesh:}
 					\subitem \textbf{1.} The user selects a mesh refinement level (0 to 4);
 					\subitem \textbf{2.} All 3 files are loaded: \texttt{topol}, \texttt{bound} and \texttt{coord}.	
 				
-				\item \textbf{create pattern for the stiffness matrix}: 
-					\subitem \textbf{1.} I created a range vector 1 to Ne, then place it 3 times as a column in a matrix and reshaped the matrix to obtain the column vector $ row = [1,1,1,2,2,2,3,\ldots]^T $. 
+				\item \textbf{create pattern for the stiffness matrix:} 
+					\subitem \textbf{1.} I created a range vector 1 to \texttt{Ne}, then place it 3 times as a column in a matrix and reshaped the matrix to obtain the column vector $ row = [1,1,1,2,2,2,3,\ldots]^T $. 
 					\subitem \textbf{2.} The \texttt{col} vector is simply obtained by reshaping the \texttt{topol} as a column vector. 
 					\subitem \textbf{3.} Then we can compute the adjacency matrix as \texttt{A = sparse(row,col,1)} and the pattern for the stiffness matrix as \texttt{H = A' * A}, finally we clean the matrix as we only want the sparse pattern, \texttt{H = H * 0}.
 				
-				\item \textbf{Stiffness matrix}:
+				\item \textbf{Stiffness matrix:}
 					I created the function \texttt{[H, delta] = computeStiff(H, topol, coord)} to encapsulate all the following computations.
 					It has the topology and coordinates matrices as inputs, as well as the $ H $ matrix with its pattern already defined before.
 					Its outputs are the final $ H $ matrix and the \texttt{delta} vector with the surface measures of each element.
@@ -49,30 +49,26 @@
 					where $ b = [b_i, b_j, b_m]$ and $ c = [c_i, c_j, c_m]$
 					\subitem \textbf{4.} Assemble the stiffness matrix H from the local matrices using algorithm 3.3.
 				
-				\item  \textbf{Right hand size}
+				\item  \textbf{Right hand size:}
 					Using a for loop to iterate in the list of nodes:
 					\subitem \textbf{1.} Get the node coordinates;
 					\subitem \textbf{2.} Find elements that have this node as a vertex and get their surface measures from the \texttt{delta} vector;
 					\subitem \textbf{3.} Compute the right hand size vector as $f_i \approxeq (-4 +2x_i^2 + 2y_i^2)  \frac{\sum_e \Delta_e}{3} $
 				
-				\item \textbf{Boundary Conditions}
+				\item \textbf{Boundary Conditions:}
 					As explained in the homework text we can simply change the diagonal value \texttt{H(i,i)}.
-					So I changed the diagonal value of H at the node i of the boundary, \texttt{H(i,i)=Rmax}.
+					So I changed the diagonal value of $ H $ at the node \texttt{i} of the boundary, \texttt{H(i,i)=Rmax}.
 				
-				\item \textbf{Solve the Linear System}
-					Following recommendations I used tolerance as $ 1 \times 10^{-8} $ and Matlab's PCG method.
-					Jacobi preconditioner as \texttt{M = sparse(diag(diag(H)))}.
-					Choledsky preconditioner as \texttt{L = ichol(H)}.
+				\item \textbf{Solve the Linear System:}
+					Following recommendations I used tolerance as $ 1 \times 10^{-8} $ and Matlab's PCG method, Jacobi preconditioner as \texttt{M = sparse(diag(diag(H)))}, Choledsky preconditioner as \texttt{L = ichol(H)}.
 					Then we can call the PCG method to solve the linear system.
-					I also recorded the solving computational time for comparison.
-					Finally we can show the convergence plots as the semi logarithmic plot of Residual Norm vs Iterations.
 				
-				\item \textbf{Error computation} Using a for loop to visit each node:
+				\item \textbf{Error computation:} Using a for loop to visit each node:
 					\subitem \textbf{1.} Get the coordinates of the node;
 					\subitem \textbf{2.} Compute the analytical solution as $u(x,y) = x^2 + y^2 - x^2y^2 - 1$;
 					\subitem \textbf{3.} Sum surface measures of each element that have this node as a vertex;
 					\subitem \textbf{4.} Compute local error as $ (u_i - u(x_i,y_i)^ 2 \frac{\sum_e \Delta_e}{3} $;
-					\subitem \textbf{5.} Sum all local error and $ \epsilon $ will be its square root.	
+					\subitem \textbf{5.} Sum all the local errors and $ \epsilon $ will be its square root.	
 			\end{enumerate}
 			
 	
@@ -100,10 +96,13 @@
 					\label{fig:convergence}
 				\end{figure}
 				
-				There are clear differences in convergence when using the 2 preconditioners.
-				The Choledsky preconditioner significantly improves convergence by reducing the number of iterations needed.
+				There are clear differences in convergence regarding the preconditioner used.
+				The Choledsky preconditioner significantly improves convergence by reducing the number of iterations needed in up to 3x.
+				
 				There is also a clear slowdown of convergence when increasing the level of refinement.
 			
+				I also recorded the computational time needed to solve each PCG method but found no relevant differences.
+				
 			\subsection{Error}
 				\begin{table}[H]
 					\centering
@@ -118,7 +117,7 @@
 					\caption{FEM Convergence table}
 					\label{table:errors}
 				\end{table}
-				Each level of refinment drecreases $ l $ by a factor of $ 2 $, $ l_{i+1} = \frac{1}{2}l_i $.
+				Each level of refinement decreases $ l $ by a factor of $ 2 $, $ l_{i+1} = \frac{1}{2}l_i $.
 				The error is proportional to $l^2$ so $ \epsilon_{i+1} = \frac{1}{4}\epsilon_i $.
 				This corresponds to our experimental values and ratio.
 	
