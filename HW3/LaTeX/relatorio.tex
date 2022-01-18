@@ -26,40 +26,53 @@
 			Based on the homework text I implemented each step in Matlab.
 			
 			\begin{enumerate}
-				\item \textbf{Input files from specified mesh}: The user selects a mesh refinement level (0 to 4), all 3 files are loaded: \texttt{topol}, \texttt{bound} and \texttt{coord}.	
-				\item \textbf{create pattern for the stiffness matrix}: 1st I created a range vector 1 to Ne, then place it 3 times in a matrix and convert the matrix to obtain the \texttt{row} vector $ row = [1,1,1,2,2,2,3,\ldots] $. The \texttt{col} vector is simply obtained by reshaping the \texttt{topol} as a column vector. Then we can compute the adjancy matrix as \texttt{A = sparse(row,col,1)} and finaly the pattern for the stifness matrix as \texttt{H = A' * A}.
-				\item \textbf{Stifness matrix}:
-				I created the function \texttt{[H, delta] = computeStiff(H, topol, coord)} to encapsulate all the following computations.
-				It has the topology and coordinates matrixes as input as well as the H matrix with its pattern already defined before.
-				Its outputs are the final H matrix and the \texttt{delta} vector with the surface measures of each element.
-				Using a for loop for each element:
-				3.1 - get coordinates of the 3 nodes that define the element, compute the surface measure for that element and save in the \texttt{delta} vector.
-				3.2 - compute b,c (a is not needed): $\ldots$s
-				3.3 - compute Hloc as $\ldots$ (Algorithm 3.3)
+				\item \textbf{Input files from specified mesh}:
+					\subitem \textbf{1.} The user selects a mesh refinement level (0 to 4);
+					\subitem \textbf{2.} All 3 files are loaded: \texttt{topol}, \texttt{bound} and \texttt{coord}.	
+				
+				\item \textbf{create pattern for the stiffness matrix}: 
+					\subitem \textbf{1.} I created a range vector 1 to Ne, then place it 3 times as a column in a matrix and reshaped the matrix to obtain the column vector $ row = [1,1,1,2,2,2,3,\ldots]^T $. 
+					\subitem \textbf{2.} The \texttt{col} vector is simply obtained by reshaping the \texttt{topol} as a column vector. 
+					\subitem \textbf{3.} Then we can compute the adjacency matrix as \texttt{A = sparse(row,col,1)} and the pattern for the stiffness matrix as \texttt{H = A' * A}, finally we clean the matrix as we only want the sparse pattern, \texttt{H = H * 0}.
+				
+				\item \textbf{Stiffness matrix}:
+					I created the function \texttt{[H, delta] = computeStiff(H, topol, coord)} to encapsulate all the following computations.
+					It has the topology and coordinates matrices as inputs, as well as the $ H $ matrix with its pattern already defined before.
+					Its outputs are the final $ H $ matrix and the \texttt{delta} vector with the surface measures of each element.
+					Using a for loop for each element:
+					\subitem \textbf{1.} Get coordinates of the 3 nodes that define the element, compute the surface measure for that element and save it in the \texttt{delta} vector.
+					$$ \Delta = \frac{1}{2} \begin{vmatrix} 1 & x_i & y_i \\ 1 & x_j & y_j \\ 1 & x_m & y_m \end{vmatrix} $$
+					\subitem \textbf{2.} Compute the $ b $ and $ c  $ coefficients of the basis functions ($a$ is not needed): 
+					$$  b_i = y_j - y_m  \qquad c_i = x_m - x_j ,$$ others are obtained using anticlockwise indices permutation.
+					\subitem \textbf{3.} Compute \texttt{Hloc} for an element as 
+					$$ H_{loc} = \frac{1}{4\Delta}\{ b^Tb + c^Tc \} $$ 
+					where $ b = [b_i, b_j, b_m]$ and $ c = [c_i, c_j, c_m]$
+					\subitem \textbf{4.} Assemble the stiffness matrix H from the local matrices using algorithm 3.3.
+				
 				\item  \textbf{Right hand size}
-				Using a for loop:
-				4.1 - get coords of the node;
-				4.2 - find <elements that have that node as a vertex to get their surface measures
-				$\ldots$
-				4.3 - compute the rhs as $fxy * surfs/3 $
+					Using a for loop to iterate in the list of nodes:
+					\subitem \textbf{1.} Get the node coordinates;
+					\subitem \textbf{2.} Find elements that have this node as a vertex and get their surface measures from the \texttt{delta} vector;
+					\subitem \textbf{3.} Compute the right hand size vector as $f_i \approxeq (-4 +2x_i^2 + 2y_i^2)  \frac{\sum_e \Delta_e}{3} $
+				
 				\item \textbf{Boundary Conditions}
-				As explained in the homework text we can simply change the diagonal value Hii.
-				When susbititutiing Hii=Rmax I got a nonpositive pivot H matrix resulting in a error when computing the Choledsky factorization.
-				The solution was to multiply Hii by Rmax instead of replacing it. \texttt{H(i,i) = Rmax*H(i,i)}.
+					As explained in the homework text we can simply change the diagonal value \texttt{H(i,i)}.
+					So I changed the diagonal value of H at the node i of the boundary, \texttt{H(i,i)=Rmax}.
+				
 				\item \textbf{Solve the Linear System}
-				Using tolerance as 1e-8 and Matlab's PCG method.$\ldots$
-				Jacobi preconditioner as \texttt{M = sparse(diag(diag(H)))}.
-				Choledsky preconditioner as \texttt{L = ichol(H)}.
-				Then we can call the PCG method to solve the linear system.
-				I also recorded the solving computational time for comparison.
-				Finally we can show the convergence plots as the semi logratimic plot of Residual Norm vs Iterations.
-				\item \textbf{Error computation}
-				Using a for loop to visit each node:
-				7.1 - get the coordinates of the node;
-				7.2 - compute the analytical solution as $u_a = x^2 + y^2 - x^2y^2 - 1$.
-				7.3 - sum surface measures of each element that have this node as a vertex;
-				7.4 - compute local error as $\ldots$
-				7.5 - sum all local error and $ \epsilon $ will be its square root.	
+					Following recommendations I used tolerance as $ 1 \times 10^{-8} $ and Matlab's PCG method.
+					Jacobi preconditioner as \texttt{M = sparse(diag(diag(H)))}.
+					Choledsky preconditioner as \texttt{L = ichol(H)}.
+					Then we can call the PCG method to solve the linear system.
+					I also recorded the solving computational time for comparison.
+					Finally we can show the convergence plots as the semi logarithmic plot of Residual Norm vs Iterations.
+				
+				\item \textbf{Error computation} Using a for loop to visit each node:
+					\subitem \textbf{1.} Get the coordinates of the node;
+					\subitem \textbf{2.} Compute the analytical solution as $u(x,y) = x^2 + y^2 - x^2y^2 - 1$;
+					\subitem \textbf{3.} Sum surface measures of each element that have this node as a vertex;
+					\subitem \textbf{4.} Compute local error as $ (u_i - u(x_i,y_i)^ 2 \frac{\sum_e \Delta_e}{3} $;
+					\subitem \textbf{5.} Sum all local error and $ \epsilon $ will be its square root.	
 			\end{enumerate}
 			
 	
@@ -68,120 +81,46 @@
 		
 			\subsection{Convergence Plots}
 			
-				$\ldots$
+				As required the following images show the convergence plots for all refinement levels, one for each preconditioner.
 				
 				\begin{figure}[H]
 					\begin{subfigure}{.49\textwidth}
 						\centering
-						\includegraphics[width=.99\linewidth]{img0/J.png}  
+						\includegraphics[width=.99\linewidth]{ConvergenceJ.png}  
 						\caption{Jacobi}
-						\label{fig:Jacobi_0}
+						\label{fig:Jacobi}
 					\end{subfigure}
 					\begin{subfigure}{.49\textwidth}
 						\centering
-						\includegraphics[width=.99\linewidth]{img0/C.png}  
+						\includegraphics[width=.99\linewidth]{ConvergenceC.png}  
 						\caption{Choledsky}
-						\label{fig:Chol_0}
+						\label{fig:Chol}
 					\end{subfigure}
-					\caption{Convergence plots for level 0}
-					\label{fig:fig0}
-				\end{figure}
-				
-				\begin{figure}[H]
-					\begin{subfigure}{.49\textwidth}
-						\centering
-						\includegraphics[width=.99\linewidth]{img1/J.png}  
-						\caption{Jacobi}
-						\label{fig:Jacobi_1}
-					\end{subfigure}
-					\begin{subfigure}{.49\textwidth}
-						\centering
-						\includegraphics[width=.99\linewidth]{img1/C.png}  
-						\caption{Choledsky}
-						\label{fig:Chol_1}
-					\end{subfigure}
-					\caption{Convergence plots for level 1}
-					\label{fig:fig1}
-				\end{figure}
-			
-				\begin{figure}[H]
-					\begin{subfigure}{.49\textwidth}
-						\centering
-						\includegraphics[width=.99\linewidth]{img2/J.png}  
-						\caption{Jacobi}
-						\label{fig:Jacobi_2}
-					\end{subfigure}
-					\begin{subfigure}{.49\textwidth}
-						\centering
-						\includegraphics[width=.99\linewidth]{img2/C.png}  
-						\caption{Choledsky}
-						\label{fig:Chol_2}
-					\end{subfigure}
-					\caption{Convergence plots for level 2}
-					\label{fig:fig2}
-				\end{figure}
-			
-				\begin{figure}[H]
-					\begin{subfigure}{.49\textwidth}
-						\centering
-						\includegraphics[width=.99\linewidth]{img3/J.png}  
-						\caption{Jacobi}
-						\label{fig:Jacobi_3}
-					\end{subfigure}
-					\begin{subfigure}{.49\textwidth}
-						\centering
-						\includegraphics[width=.99\linewidth]{img3/C.png}  
-						\caption{Choledsky}
-						\label{fig:Chol_3}
-					\end{subfigure}
-					\caption{Convergence plots for level 3}
-					\label{fig:fig3}
-				\end{figure}
-			
-				\begin{figure}[H]
-					\begin{subfigure}{.49\textwidth}
-						\centering
-						\includegraphics[width=.99\linewidth]{img4/J.png}  
-						\caption{Jacobi}
-						\label{fig:Jacobi_4}
-					\end{subfigure}
-					\begin{subfigure}{.49\textwidth}
-						\centering
-						\includegraphics[width=.99\linewidth]{img4/C.png}  
-						\caption{Choledsky}
-						\label{fig:Chol_4}
-					\end{subfigure}
-					\caption{Convergence plots for level 4}
-					\label{fig:fig4}
+					\caption{Convergence plots - Residual norms vs Iterations}
+					\label{fig:convergence}
 				\end{figure}
 				
 				There are clear differences in convergence when using the 2 preconditioners.
 				The Choledsky preconditioner significantly improves convergence by reducing the number of iterations needed.
-				There are no significant differences regarding the residual norms and between levels of refinement.
+				There is also a clear slowdown of convergence when increasing the level of refinement.
 			
-			\subsection{Epsilon}
+			\subsection{Error}
 				\begin{table}[H]
 					\centering
-%					\begin{tabular}{c|c|c}
-%						\textbf{Level} 	& \textbf{$ \epsilon $} & \textbf{ Error Ratio}  \\ \hline
-%						$ 0  $			& $ 0.9931 $ & N/A \\ \hline
-%						$ 1  $			& $ 1.0231 $ & $ 1.0302 $ \\ \hline
-%						$ 2  $			& $ 1.0217 $ & $ 0.9986 $ \\ \hline
-%						$ 3  $			& $ 1.0190 $ & $ 0.9974 $ \\ \hline
-%						$ 4  $			& $ 1.0176 $ & $ 0.9986 $ \\ 
-%					\end{tabular}
-					\begin{tabular}{c|c|c}
-						\textbf{Level} 	& \textbf{$ \epsilon $} & \textbf{ Error Ratio}  \\ \hline
-						$ 0  $			& $ 0.9931 $ 			& N/A \\ \hline
-						$ 1  $			& $ 1.0508 $ 			& $ 1.0581 $ \\ \hline
-						$ 2  $			& $ 1.0629 $ 			& $ 1.0115 $ \\ \hline
-						$ 3  $			& $ 1.0657 $	 		& $ 1.0026 $ \\ \hline
-						$ 4  $			& $ 1.0664 $ 			& $ 1.0007 $ \\ 
+					\begin{tabular}{c|c|c}         
+						\textbf{Level} 	& \textbf{ Error $ \epsilon $} 		& \textbf{Error Ratio}  \\ \hline
+						$ 0  $			& $ 6.912 \times 10^{-2} $ 	& N/A \\ \hline
+						$ 1  $			& $ 1.631 \times 10^{-2} $ 	& $ 0.236 $ \\ \hline
+						$ 2  $			& $ 3.984 \times 10^{-3} $ 	& $ 0.244 $ \\ \hline
+						$ 3  $			& $ 9.883 \times 10^{-4} $	& $ 0.248 $ \\ \hline
+						$ 4  $			& $ 2.465 \times 10^{-4} $ 	& $ 0.249 $ \\ 
 					\end{tabular}
 					\caption{FEM Convergence table}
 					\label{table:errors}
 				\end{table}
-				The $ \epsilon $ value slightly increases on each step of refinement....??
+				Each level of refinment drecreases $ l $ by a factor of $ 2 $, $ l_{i+1} = \frac{1}{2}l_i $.
+				The error is proportional to $l^2$ so $ \epsilon_{i+1} = \frac{1}{4}\epsilon_i $.
+				This corresponds to our experimental values and ratio.
 	
 	
 \end{document}
