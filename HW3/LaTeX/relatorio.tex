@@ -1,10 +1,8 @@
 \documentclass[a4paper, 11pt]{article}
 \usepackage{geometry}
-\usepackage{indentfirst}
-\usepackage{setspace}
+%\usepackage{setspace}
 \usepackage{amsmath}
 \usepackage{graphicx}
-\usepackage{wrapfig}
 \usepackage{caption}
 \usepackage{indentfirst}
 \setlength{\parindent}{20pt}
@@ -44,10 +42,9 @@
 			\end{equation}
 		
 			This problem will be solved with the Finite Element Method using triangular elements and linear basis functions.
-			It can simulate an elastic membrane fixed ate the boundary, with small displacement and an orthogonal force with intensity $ f $.
+			It can simulate an elastic membrane fixed at the boundary, with small displacement and an orthogonal force with intensity $ f $.
 			The Dirichlet conditions define how the membrane is fixed and $u$ is the out-of-plane displacement of the membrane.
 			
-		
 			\section{Step-by-step Implementation}
 				We can reduce the problem to a linear system.
 				\begin{equation}
@@ -61,11 +58,11 @@
 			\begin{enumerate}
 				\item \textbf{Input files from specified mesh:} 
 				
-					All 3 files are loaded: \texttt{topol}, \texttt{bound} and \texttt{coord}, for the current mesh refinement level.	
+					All 3 files are loaded - \texttt{topol}, \texttt{bound} and \texttt{coord} - for the current mesh refinement level.	
 				
 				\item \textbf{Create pattern for the stiffness matrix:} 
 					\subitem \textbf{1.} Create a range vector 1 to \texttt{Ne}, then place it 3 times as a column in a matrix and reshape the matrix to obtain the column vector $ row = [1,1,1,2,2,2,3,\ldots]^T $. 
-					\subitem \textbf{2.} The \texttt{col} vector is simply obtained by reshaping the \texttt{topol} as a column vector. 
+					\subitem \textbf{2.} The \texttt{col} vector is simply obtained by reshaping the \texttt{topol} matrix as a column vector. 
 					\subitem \textbf{3.} Compute the adjacency matrix as \texttt{A = sparse(row,col,1)} and the pattern for the stiffness matrix as \texttt{H = A' * A}, finally cleaning the matrix coefficients as we only want the sparse pattern, \texttt{H = H * 0}.
 				
 				\item \textbf{Compute the stiffness matrix $H$:}
@@ -92,7 +89,7 @@
 				
 				\item \textbf{Enforce the boundary conditions:}
 				
-					For this problem we can simply substitute the diagonal value of $ H $ at the node \texttt{i} of the boundary with a large enough constant, \texttt{H(i,i) = Rmax}.
+					For this problem we can simply substitute the diagonal value of $ H $ at the node \texttt{i} of the boundary with a large enough constant, \texttt{H(i,i) = Rmax}, \texttt{Rmax} $= 10^{15} $ in this case.
 					
 				
 				\item \textbf{Solve the Linear System:}
@@ -160,6 +157,7 @@
 				The error is proportional to $l^2$ so $ \epsilon_{i+1} = \frac{1}{4}\epsilon_i $.
 				So we can conclude that the results are as expected.
 			
+			\pagebreak
 			\section{Conclusion}
 				We can hereby conclude that the Finite Element Method is a good approach to solve these types of problems.
 				

@@ -8,7 +8,7 @@ close all
 clear all
 
 %% Input
-prec = 'C'; % J -> use Jacobi, C -> use Choledsky
+prec = 'C'; % J -> use Jacobi, C -> use Cholesky
 
 % PCG Parameters
 tol = 1e-8;
@@ -24,12 +24,12 @@ Tsols = zeros(1,5);
 epsilons = zeros(1,5);
 
 for imesh=0:4
-    % Load from mesh files
+    % Load mesh files
     mesh = num2str(imesh);
     file = ['Input files\mesh' mesh '\mesh' mesh]; 
     coord = load([file '.coord']);
     topol = load([file '.topol']);
-    bound = load([file '.bound']); % boundary conditions
+    bound = load([file '.bound']);
     
     % parameters
     Ne = length(topol);
@@ -71,19 +71,19 @@ for imesh=0:4
     
     %% Linear System Solution
     
-    
     if prec == 'J' % Jacobi
         M = sparse(diag(diag(H)));
         tic
         [u, flag, relres, iter, resvec] = pcg(H, f, tol, maxit, M);
         Tsol = toc;
-    elseif prec == 'C' % Choledsky
+    elseif prec == 'C' % Cholesky
         L = ichol(H);
         tic
         [u, flag, relres, iter, resvec] = pcg(H, f, tol, maxit, L, L');
         Tsol = toc;
     else
-        disp('Invalid value for the preconditioner id, valid values: J and C.')
+        disp('Invalid value for the preconditioner id., valid values: J and C.')
+        return;
     end
 
     %save results
@@ -98,18 +98,16 @@ for imesh=0:4
         % Compute analytical solution
         xi = coord(i,1);
         yi = coord(i,2);
-        u_exact = xi^2 + yi^2 - xi^2*yi^2 - 1; % analytical solution
+        u_exact = xi^2 + yi^2 - xi^2 * yi^2 - 1; % analytical solution
         
         % Compute surface measure
         els = mod(find(topol==i),Ne);
-        els(els==0) = Ne; % fix bad change of k*Ne to 0, k=1,2,...
-        surf = sum(delta(els))/3; % surface measure
+        els(els==0) = Ne; % fix bad change of k*Ne to 0
     
-        res = (u(i)- u_exact)^2 * surf;
+        res = (u(i)- u_exact)^2 * sum(delta(els))/3;
         error = error + res;
     end
     epsilons(imesh+1) = sqrt(error);
-    
     
     
 end
@@ -136,7 +134,7 @@ save([savefolder 'res.txt'],'epsilons','Tsols','-ascii');
 
 %% Functions
 % Compute Stifness Matrix
-function [H, delta]= computeStiff(H, topol, coord)
+function [H, delta] = computeStiff(H, topol, coord)
     
     Ne = length(topol);
     delta = ones(Ne,1);
